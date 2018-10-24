@@ -1,0 +1,8 @@
+@import './_border';
+$color:#ff6226;
+a{
+	color:$color;
+	border-color:green;
+	@include rounded-corner;
+	@include active(green,blue)
+}
