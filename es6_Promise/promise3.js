@@ -24,6 +24,6 @@ var p4 = new Promise((resolve,reject)=>{
 	setTimeout(resolve, 600 , '4')   //600ms后执行
 })
 // 同时执行p1和p2，并在它们都完成后执行then:
-Promise.all([p3, p4]).then(function (results) {
-    console.log(results); //返回[3 ,4]
+Promise.race([p3, p4]).then(function (results) {
+    console.log(results); //返回3
 });
