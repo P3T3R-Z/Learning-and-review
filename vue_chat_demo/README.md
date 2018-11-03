@@ -1,6 +1,6 @@
 # chatdemo
 
-> A Vue.js project
+> vue+socket.io模块的运用,无db存储
 
 ## Build Setup
 
