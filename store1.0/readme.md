@@ -11,4 +11,4 @@
     
   - npm install安装依赖
   
-  - node 入口文件
+  
