@@ -1,0 +1,83 @@
+*{margin:0;padding:0;list-style:none;}
+html{font-size: 16px;}
+.statusBar{
+	background: skyblue;
+	text-align: right;
+	color:#fff;
+	font-style: italic;
+	height: 3rem;
+	line-height: 3rem;
+	margin-bottom:10px;
+}
+.statusBar a#logo{
+	float:left;
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 20px;
+	margin-left: 10px;
+}
+.statusBar a{
+	color:#fff;
+	cursor: pointer;
+}
+
+#tabbox{
+	display: flex;
+	align-items: flex-start;
+}
+#left_nav{
+	border:1px solid #999;
+	width: 150px;
+	margin-right: 10px;
+}
+#left_nav li{
+	border-bottom:1px solid #999;
+	text-align: center;
+	line-height: 2rem;
+	cursor: pointer;
+}
+#left_nav li:last-child{
+	border:none;
+}
+#left_nav li.on{
+	background: skyblue;
+	color:#fff;
+	
+}
+#left_nav li a{
+	text-decoration: none
+}
+#goodslist{
+	flex:1;
+	border:1px solid #999;
+}
+#goodslist thead{
+	background: skyblue;
+	color:#fff;
+}
+#goodslist tr{
+	line-height: 2rem;
+	height: 2rem;
+}
+
+#goodslist tbody tr:hover{
+	background: #eaeaea
+}
+#goodslist tr:last-child td{border-bottom:none;}
+#goodslist td{
+	text-align: center;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+#goodslist td:last-child{
+	border-right:none;
+	border-bottom: 1px solid #999;
+}
+#goodslist td button{
+	margin-right: 10px
+}
+
+#goodslist img{
+	width: 50px;
+	display: block
+}
