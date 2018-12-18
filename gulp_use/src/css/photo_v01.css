@@ -1,0 +1,158 @@
+
+.htmleaf-container, .htmleaf-containe-ewm{
+    margin: 0 auto;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    height: 92%;
+    position: fixed;
+    top: 0;
+    z-index: 9999999;
+    max-width: 750px;
+}
+
+#clipArea, #clipAreaEwm {
+    height: 100%;
+}
+
+/*上传图标*/
+#file{
+    float: left;
+    height: 100%;
+}
+#clipBtn{
+}
+.htmleaf-container-adcommon{
+    background: #efefef;
+}
+.foot-use{
+    padding: 20px 15px;
+    width: 100%;
+    background: rgba(255,255,255,1);
+    position: absolute;
+    bottom: 0;
+}
+
+
+.uploader {
+    position: absolute;
+    width: 54%;
+    height: 8rem;
+    left: 23%;
+    cursor: default;
+    height: 100%;
+    float: left;
+}
+.uploader1 {
+    width: 100%;
+    cursor: default;
+    height: 100%;
+    float: left;
+}
+.filename {
+    position: absolute;
+    outline: 0 none;
+    line-height: 1.5rem;
+    font-size: 1.5rem;
+    color: #999;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    cursor: default;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 0;
+    top: 9.2rem;
+    text-align: center;
+
+}
+
+.button {
+    float: left;
+    height: 100%;
+    display: inline-block;
+    outline: 0 none;
+    margin: 0;
+    cursor: pointer;
+    border: 0;
+    width: 8rem;
+    font-size: 2rem;
+}
+
+.uploader input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    height:8rem;
+    width: 100%;
+    cursor: pointer;
+   border: solid 1px #ddd;
+    opacity: 0;
+}
+.uploader1 input[type=file] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    height:8rem;
+    width: 100%;
+    cursor: pointer;
+    border: solid 1px #ddd;
+    opacity: 0;
+}
+
+
+.blue .button {
+    /*color: #fff;*/
+    height: 100%;
+    /*background: transparent;*/
+    font-size: 17px;
+
+}
+.uploader_piclker{
+    color:#55b936;
+    border: 1px solid #55b936;
+    background: #fff !important;
+    margin-bottom: 20px;
+    border-width: 1px !important;
+}
+.uploader_clip{
+    background: #55b936;
+}
+@media screen and (max-width:320px) {
+.foot-use {
+    padding: 10px;
+}
+.uploader_piclker{
+    margin-bottom: 10px;
+}
+.blue .button ,.uploader_clip {
+    font-size: 14px;
+}
+.photo-clip-view, .photo-clip-mask-left,.photo-clip-mask-bottom, .photo-clip-area{
+    top:40% !important;
+}
+.photo-clip-mask-top{
+    bottom: 60% !important;
+}
+.photo-clip-mask-right{
+    top:40% !important;
+    bottom: 60% !important;
+}
+.photo-clip-area{
+    
+}
+}
+@media screen and (min-width:321px) and (max-width:400px){
+	
+}
+@media screen and (min-width:401px) and (max-width:700px){
+	
+}
