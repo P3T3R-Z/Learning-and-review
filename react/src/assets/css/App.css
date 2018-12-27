@@ -1,0 +1,75 @@
+.App {
+  text-align: center;
+}
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 10vmin;
+}
+.nav {
+  background-color: skyblue;
+  display: flex
+}
+.nav a {
+  margin: 0 5px;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.blue {
+  color: pink;
+}
+.leftnav{
+  width: 100px;
+  background:#eee;
+  border:1px solid #333;
+  display: flex;
+  flex-direction: column
+}
+.leftnav a{
+  border-bottom:1px solid #333;
+}
+.pagefix{
+  display: flex;
+  align-items:flex-start;
+  
+}
+.rightpage{
+  flex:1;
+  border: 1px solid rgb(14, 100, 170);
+  height: 100px
+}
+
+.gutter-example .ant-row > div {
+  background: transparent;
+  border: 0;
+}
+.gutter-box {
+  background: #00A0E9;
+  padding: 5px 0;
+}
