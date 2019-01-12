@@ -4,7 +4,7 @@ class News2 extends Component {
     constructor(props){
         super(props);
         this.state = {
-            msg:'get路由--',
+            msg:'get路由aid---',
             aid:''
         }
     }
@@ -12,7 +12,7 @@ class News2 extends Component {
         //获取get传值
         // 在react中使用url模块需要安装
         console.log(url.parse(this.props.location.search, true))
-        var aid = url.parse(this.props.location.search, true).query.a
+        var aid = url.parse(this.props.location.search, true).query.aid
         this.setState({
             aid
         })

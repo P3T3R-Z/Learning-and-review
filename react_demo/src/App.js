@@ -4,7 +4,6 @@ import 'antd/dist/antd.css';
 import "./assets/css/App.css";
 import routers from "./router/router"; //路由模块
 
-
 class App extends Component {
   constructor(props) {
     super(props);

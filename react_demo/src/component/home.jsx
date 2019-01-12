@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Header from "./header";
 import logo from "../assets/images/logo.svg";
+import "../assets/scss/index.scss"
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -20,19 +21,11 @@ class Home extends Component {
     };
     this.getMsg3 = this.getMsg3.bind(this); //事件指定this
   }
-  run = () => {
-    alert("我是父组件传递给子组件的方法");
-  };
 
-  //主动获取子组件数据
-  getChild = () => {
-    console.log(this.refs.header);
-    alert(this.refs.header.state.userinfo);
-  };
   render() {
     return (
       <div className="App">
-        
+        <a>npm i node-sass 编译sass</a>
         <p>jsx图片模块引入</p>
         <img src={logo} className="App-logo" alt="logo" />
         {/*循环: 变量绑定样式*/}
@@ -82,11 +75,11 @@ class Home extends Component {
         <h3>父子组件传值</h3>
         {/*在调用子组件的时候定义一个属性,用于传递*/} {/*ref用于获取子组件dom*/}
         <Header
-          run={this.run} 
-          title={this.state.title} 
-          all={this} 
+          run={this.run}
+          title={this.state.title}
+          all={this}
           num={this.state.num}
-          ref="header" 
+          ref="header"
         />
         <button onClick={this.getChild}>父级主动获取子组件数据</button>
       </div>

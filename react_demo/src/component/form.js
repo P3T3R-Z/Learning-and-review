@@ -6,7 +6,7 @@ class form extends React.Component {
     this.state = {
       msg: "react组件",
       name: "",
-      sex: "1",
+      sex: 1,
       city: "",
       citys: ["北京", "上海", "深圳"],
       hobby: [
@@ -33,20 +33,20 @@ class form extends React.Component {
       <div>
         <h3>{this.state.msg}</h3>
         <form onSubmit={this.formsubmit}>
-          姓名:{" "}
+          姓名:
           <input type="text" onChange={this.getname} value={this.state.name} />
           <br />
-          性别:{" "}
+          性别:
           <input
             type="radio"
-            checked={this.state.sex == 1}
+            checked={this.state.sex === 1}
             onChange={this.getSex}
             value="1"
           />
           男
           <input
             type="radio"
-            checked={this.state.sex == 2}
+            checked={this.state.sex === 2}
             onChange={this.getSex}
             value="2"
           />
@@ -97,7 +97,7 @@ class form extends React.Component {
   };
   getSex = e => {
     this.setState({
-      sex: e.target.value
+      sex: parseInt(e.target.value)
     });
   };
   getcity = e => {

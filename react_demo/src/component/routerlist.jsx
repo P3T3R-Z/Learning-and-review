@@ -13,7 +13,7 @@ class Routerlist extends Component {
   render() {
     if (this.state.flag === true) {
       console.log("js路由跳转了");
-      return <Redirect to={{ pathname: "/" }} />;
+      return <Redirect to={{ pathname: "/form" }} />;
     }
     return (
       <div>
