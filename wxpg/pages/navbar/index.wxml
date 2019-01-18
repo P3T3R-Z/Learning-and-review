@@ -1,0 +1,21 @@
+<view class='nav-wrap' style='height: {{height*2 + 20}}px;'>
+
+
+  <view class="top_nav_flex">
+    <view class='nav-capsule' style='line-height: {{height*2 + 44}}px;' wx:if='{{navbarData.showCapsule}}'>
+      <view bindtap='_navback' wx:if='{{!share}}'>
+        <i-icon type="return" size="20" color="#000" />
+      </view>
+      <view class='navbar-v-line' wx:if='{{!share}}'></view>
+      <view bindtap='_backhome'>
+        <i-icon type="homepage" size="20" color="#000" />
+      </view>
+    </view>
+    <view class='nav-title' style='line-height: {{height*2 + 44}}px;'>{{navbarData.title}}</view> 
+  </view>
+
+<!-- <view class='nav-title' style='height: {{height*2 + 44}}px;'>
+    <i-input value="{{ value6 }}" mode="wrapped" placeholder="输入关键词搜索" bind:change="searchinput" />
+  </view> -->
+
+</view>

@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "i-swipeout": "../../iView/swipeout/index",
+    "i-cell": "../../iView/cell/index",
+    "nav-bar": "/pages/navbar/index"
+  }
+}
