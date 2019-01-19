@@ -1,12 +1,12 @@
 ## bootstrap-sass使用
 
 ### 文件说明
-`sass\bootstrap`-------bootstrap源文件
-`sass\_bootstrap.scss`-------bootstrap默认引入
-`sass\_bootstrap-variables.scss`-------bootstrap自定义参数文件
-`sass\_bootstrap-custom.scss`-------bootstrap自定义引入
-`sass\styles.scss`------编译入口文件
-`stylesheets\styles.css`-------编译后文件
++ `sass\bootstrap`-------bootstrap源文件
++ `sass\_bootstrap.scss`-------bootstrap默认引入
++ `sass\_bootstrap-variables.scss`-------bootstrap自定义参数文件
++ `sass\_bootstrap-custom.scss`-------bootstrap自定义引入
++ `sass\styles.scss`------编译入口文件
++ `stylesheets\styles.css`-------编译后文件
 
 ### 使用步骤
 1. 安装 Ruby 勾选添加系统环境
