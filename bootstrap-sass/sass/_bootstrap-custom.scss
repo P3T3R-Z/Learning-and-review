@@ -1,0 +1,56 @@
+/*!
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+ 
+// Core variables and mixins
+@import "custom/variables";                  //变量模块
+@import "bootstrap/mixins";                     //方法，函数模块
+ 
+// Reset and dependencies
+@import "bootstrap/normalize";                  //重置样式模块
+@import "bootstrap/print";                      //打印样式模块
+@import "bootstrap/glyphicons";                 //图标模块
+ 
+// Core CSS
+@import "bootstrap/scaffolding";                //脚手架：主要是对body，html等标签进行定制化的reset
+@import "bootstrap/type";                       //排版模块
+@import "bootstrap/code";                       //代码模块
+@import "bootstrap/grid";                       //栅格模块
+@import "bootstrap/tables";                     //表格模块
+@import "bootstrap/forms";                      //表单模块
+@import "bootstrap/buttons";                    //按键模块
+ 
+// Components
+@import "bootstrap/component-animations";       //组件动画模块
+@import "bootstrap/dropdowns";                  //下拉菜单模块
+@import "bootstrap/button-groups";              //按键组模块
+@import "bootstrap/input-groups";               //输入组模块
+@import "bootstrap/navs";                       //导航模块
+@import "bootstrap/navbar";                     //导航条模块
+@import "bootstrap/breadcrumbs";                //路径导航模块
+@import "bootstrap/pagination";                 //分页模块
+@import "bootstrap/pager";                      //页数模块
+@import "bootstrap/labels";                     //标签模块
+@import "bootstrap/badges";                     //微章模块
+@import "bootstrap/jumbotron";                  //巨幕模块
+@import "bootstrap/thumbnails";                 //缩略图模块
+@import "bootstrap/alerts";                     //警告模块
+@import "bootstrap/progress-bars";              //进度条模块
+@import "bootstrap/media";                      //媒体模块
+@import "bootstrap/list-group";                 //列表组模块
+@import "bootstrap/panels";                     //面板模块
+@import "bootstrap/responsive-embed";           //具有响应式内容的嵌入模块
+@import "bootstrap/wells";                      //Well模块
+@import "bootstrap/close";                      //关闭按钮模块
+ 
+// Components w/ JavaScript                     
+@import "bootstrap/modals";                         //模态框模块
+@import "bootstrap/tooltip";                        //提示信息模块
+@import "bootstrap/popovers";                       //弹出框模块
+@import "bootstrap/carousel";                       //carousel模块
+ 
+// Utility classes                          
+@import "bootstrap/utilities";                      //工具模块
+@import "bootstrap/responsive-utilities";           //自适应工具模块
