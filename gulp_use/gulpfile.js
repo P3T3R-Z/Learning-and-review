@@ -115,6 +115,7 @@ gulp.task("imagetask", () => {
   );
 });
 
+
 //添加版本后缀
 gulp.task("revAppend", function() {
   gulp
@@ -142,6 +143,7 @@ gulp.task("server", function() {
 gulp.task("watch", function() {
   w([...source.ignore, ...source.scss_src], ["csstask", "revAppend"]);
   w([...source.ignore, ...source.js_src], ["jstask", "revAppend"]);
+  w([...source.img_src], ["imagetask","reload"])
   w([source.html_src], ["reload"]);
   function w(path, taskname) {
     gulp.watch(path, taskname);
