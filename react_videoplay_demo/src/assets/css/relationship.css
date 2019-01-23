@@ -1,0 +1,11 @@
+
+.historybox{
+  display: flex;
+  padding-top: 9px;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.historybox > div {
+  margin-left: 9px;
+  margin-bottom: 9px;
+}
