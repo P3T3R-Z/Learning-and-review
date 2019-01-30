@@ -2,7 +2,8 @@ const static_src = "src", //源目录
   build_src = "build"; //输出目录
 const source = {
   //忽略
-  ignore: [`!${static_src}/_*.scss`],
+  ignore: [`!${static_src}/_*.scss`,`!${static_src}/*.min.js`,`!${static_src}/**/*.min.js`],
+  ignorefile:[`${static_src}/_*.scss`,`${static_src}/*.min.js`,`${static_src}/**/*.min.js`],
   //匹配源
   js_src: [`${static_src}/**/*.js`, `${static_src}/*.js`],
   html_src: [`${static_src}/**/*.html`, `${static_src}/*.html`],

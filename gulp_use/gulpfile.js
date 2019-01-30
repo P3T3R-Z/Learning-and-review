@@ -51,16 +51,28 @@ gulp.task("jstask", function() {
           presets: ["es2015"]
         })
       )
+      .on("error", function(err) {
+        gutil.log(gutil.colors.red("[Error]"), err.toString());
+      })
+      .pipe(gulp.dest(source.build_src))
+  );
+});
+
+gulp.task("jstask:build", function() {
+  return (
+    gulp
+      .src([...source.ignore, ...source.js_src])
+      .pipe(
+        changed(source.build_src, {
+          extension: ".js"
+        })
+      )
+      .pipe(
+        babel({
+          presets: ["es2015"]
+        })
+      )
       .pipe(uglify())
-      // .pipe(
-      //   rename({
-      //     //dirname: "",  //目录名
-      //     //  basename: "",	//文件名
-      //     //  prefix: "",	//前缀
-      //     //suffix: ".min", //后缀
-      //     extname: ".js" //扩展名
-      //   })
-      // )
       .on("error", function(err) {
         gutil.log(gutil.colors.red("[Error]"), err.toString());
       })
@@ -72,6 +84,20 @@ gulp.task("csstask", function() {
   return (
     gulp
       .src([...source.ignore, ...source.scss_src])
+      .pipe(
+        changed(source.build_src, {
+          extension: ".css"
+        })
+      )
+      .pipe(sass().on("error", sass.logError)) //sass 编译
+      .pipe(gulp.dest(source.build_src))
+  );
+});
+
+gulp.task("csstask:build", function() {
+  return (
+    gulp
+      .src([...source.ignore, ...source.scss_src])
       
       .pipe(
         changed(source.build_src, {
@@ -80,20 +106,20 @@ gulp.task("csstask", function() {
       )
       .pipe(sass().on("error", sass.logError)) //sass 编译
       .pipe(cleanCss()) //css压缩
-      // .pipe(
-      //   rename({
-      //     //dirname: "",  //目录名
-      //     //  basename: "",	//文件名
-      //     //  prefix: "",	//前缀
-      //     //suffix: ".min", //后缀
-      //     extname: ".css" //扩展名
-      //   })
-      // )
+
       .pipe(gulp.dest(source.build_src))
   );
 });
 
 gulp.task("imagetask", () => {
+  return (
+    gulp
+      .src(source.img_src)
+      .pipe(changed(source.build_src))
+      .pipe(gulp.dest(source.build_src))
+  );
+});
+gulp.task("imagetask:build", () => {
   return (
     gulp
       .src(source.img_src)
@@ -114,7 +140,13 @@ gulp.task("imagetask", () => {
       .pipe(gulp.dest(source.build_src))
   );
 });
-
+gulp.task('copyIgnore', function(){
+  return (
+    gulp
+    .src(source.ignorefile)
+    .pipe(gulp.dest(source.build_src))
+  );
+})
 
 //添加版本后缀
 gulp.task("revAppend", function() {
@@ -134,6 +166,7 @@ gulp.task("reload", function() {
 
 gulp.task("server", function() {
   connect.server({
+    port: 8888,
     root: source.build_src,
     livereload: true //热刷新
   });
@@ -156,11 +189,26 @@ gulp.task("default", function(cb) {
     "imagetask",
     "jstask",
     "csstask",
+    "copyIgnore",
     "revAppend",
     "server",
     "watch"
   )(cb);
 });
+
+gulp.task("build", function(cb) {
+  gulpSequence(
+    "clean:build",
+    "imagetask:build",
+    "jstask:build",
+    "csstask:build",
+    "copyIgnore",
+    "revAppend",
+    "server",
+    "watch"
+  )(cb);
+});
+
 
 gulp.task("sequenceTask", function(cb) {
   gulpSequence("jstask", "csstask", "revAppend")(cb);
