@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";//无需单独安装
+import PropTypes from "prop-types"; //无需单独安装
 
 class Header extends React.Component {
   constructor(props) {
@@ -32,21 +32,14 @@ class Header extends React.Component {
 
 //父组件没有传值时的默认值
 Header.defaultProps = {
-	other: "默认值"
+  other: "默认值"
 };
 //父组件传值类型验证
 Header.propTypes = {
-  num: PropTypes.bool
+  num: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired //验证数字或者布尔值, `.isRequired`表示必须传值
 };
-/*https://react.docschina.org/docs/typechecking-with-proptypes.html#___gatsby*/
+/*https://reactjs.org/docs/typechecking-with-proptypes.html*/
 export default Header;
-
-
-
-
-
-
-
 
 
 

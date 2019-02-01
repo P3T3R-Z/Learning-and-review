@@ -95,10 +95,12 @@ class Home extends Component {
     alert(`获取的state值:${this.state.style.color}`);
   }
   changedata = () => {
-    //改变state的方法
-    this.setState({
-      style: {
-        color: "blue"
+    //setState为异步方法,新版react赋值用法,`prevState为修改前的state`->this.state
+    this.setState((prevState)=>{
+      return {
+        style: {
+          color: "blue"
+        }
       }
     });
   };
