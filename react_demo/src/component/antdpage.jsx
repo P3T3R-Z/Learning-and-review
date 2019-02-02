@@ -74,7 +74,12 @@ class Antdpage extends React.Component {
       //loopC();
     });
   }
-
+  //组件卸载阻止异步赋值
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
   handleSizeChange = e => {
     this.setState({ size: e.target.value });
   };

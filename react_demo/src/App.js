@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
+import "antd/dist/antd.less"; 
 import "./assets/css/App.css";
 import routers from "./router/router"; //路由模块
 
@@ -19,13 +20,15 @@ class App extends Component {
           <div className="nav">
             <Link to="/">jsx基础语法</Link>
             <Link to="/form">react表单组件</Link>
-            <Link to="/todolist">todolist组件</Link>
-            <Link to="/axios">axios组件</Link>
-            <Link to="/fetchjson">fetchjsonp组件</Link>
-            <Link to="/life">组件生命周期</Link>
+            <Link to="/todolist">todolist</Link>
+            <Link to="/axios">axios</Link>
+            <Link to="/fetchjson">fetchjsonp处理跨域</Link>
+            <Link to="/life">生命周期</Link>
             <Link to="/router">react路由</Link>
             <Link to="/drouter">嵌套路由</Link>
-            <Link to="/antdpage">antd组件</Link>
+            <Link to="/antdpage">antd</Link>
+            <Link to="/trans">动画组件</Link>
+            <Link to="/rd">redux</Link>
           </div>
 
           {routers.map((item, index) => {
