@@ -36,8 +36,8 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
-const lessRegex = /\.(css|less)$/;
-const lessModuleRegex = /\.module\.(css|less)$/;
+const lessRegex = /\.(less)$/;
+const lessModuleRegex = /\.module\.(less)$/;
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
@@ -314,25 +314,29 @@ module.exports = {
             )
           },
 
+          //less配置,此项目用于自定义antd主题
           {
             test: lessRegex,
             exclude: lessModuleRegex,
-            use: getStyleLoaders(
-              { importLoaders: 2, javascriptEnabled: true },
-              "less-loader"
-            )
-          },
-          {
-            test: lessModuleRegex,
-            use: getStyleLoaders(
+            use: [
               {
-                importLoaders: 2,
-                modules: true,
-                getLocalIdent: getCSSModuleLocalIdent,
-                javascriptEnabled: true
+                loader: "style-loader"
               },
-              "less-loader"
-            )
+              {
+                loader: "css-loader"
+              },
+              {
+                loader: "less-loader",
+                options: {
+                  modifyVars: {
+                    "primary-color": "pink",
+                    "link-color": "#1DA57A",
+                    "border-radius-base": "2px"
+                  },
+                  javascriptEnabled: true
+                }
+              }
+            ]
           },
 
           // "file" loader makes sure those assets get served by WebpackDevServer.
