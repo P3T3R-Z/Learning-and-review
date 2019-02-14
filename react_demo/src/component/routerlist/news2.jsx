@@ -4,7 +4,7 @@ class News2 extends Component {
     constructor(props){
         super(props);
         this.state = {
-            msg:'get路由aid---',
+            msg:'',
             aid:''
         }
     }
@@ -19,7 +19,7 @@ class News2 extends Component {
     }
     render() {
         return (
-            <div>{this.state.msg+this.state.aid}</div>
+            <div>get路由aid---{+this.state.aid}</div>
             
         );
     }

@@ -17,13 +17,16 @@ class Routerlist extends Component {
     }
     return (
       <div>
-        <Link to="/router/newsa/1">动态路由</Link>
-        <Link to="/router/news">路由get传值</Link>
+        <Link to="/router/news/">匹配news</Link><br/>
+        <Link to="/router/news/sub">匹配news 子路径</Link><br/>
+        <Link to="/router/news/1">匹配news 带参数(动态路由)</Link><br/>
+        <br/>
+        <Link to="/router/news2?aid=2">路由get传值</Link><br/>
         <button onClick={this.redirt}>js路由跳转</button>
 
         <div>
-          <Route path="/router/newsa/:aid" component={News} />
-          <Route path="/router/news" component={News2} />
+          <Route path="/router/news" component={News} />
+          <Route path="/router/news2" component={News2} />
         </div>
       </div>
     );
@@ -36,3 +39,14 @@ class Routerlist extends Component {
 }
 
 export default Routerlist;
+
+
+
+//<BrowserRouter> / <HashRouter> 路由方式
+// <Route> 路由规则
+// <Swtich> 路由选项
+// <Link>/<NavLink> 跳转导航
+// <Redirect> 自动跳转
+
+
+//匹配不带参数,子路径,带参数动态路由页面详情前三个
