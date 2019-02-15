@@ -9,13 +9,14 @@ import React, { Component, Fragment } from "react";
 import { store } from "../store";
 import rdpng from "../assets/images/redux.png";
 import axios from "axios";
-import {
-  input_value_change,
-  add_todo_item,
-  item_delete,
-  init_todolist
-} from "../store/actionType";
+
 import ReduxpageUi from "./reduxpage_ui";
+import {
+  getinitlist,
+  inputchange,
+  addtodolist,
+  deletelist
+} from "../store/actionCreator";
 
 class Rd extends Component {
   constructor(props) {
@@ -57,10 +58,8 @@ class Rd extends Component {
     axios
       .get(api)
       .then(res => {
-        const action = {
-          type: init_todolist,
-          data: res.data.result
-        };
+        //初始化todolist的action
+        const action = getinitlist(res.data.result);
         store.dispatch(action);
       })
       .catch(err => {
@@ -68,24 +67,19 @@ class Rd extends Component {
       });
   }
   handleBtnclick = () => {
-    const action = {
-      type: add_todo_item
-    };
+    //生成增加todolist的action
+    const action = addtodolist();
     store.dispatch(action);
   };
   handleInputChange = e => {
-    //redux store数据处理
-    const action = {
-      type: input_value_change,
-      value: e.target.value
-    };
+    //生成inputchange的action
+    const action = inputchange(e.target.value);
+    //派发action
     store.dispatch(action);
   };
   itemDelete = index => {
-    const action = {
-      type: item_delete,
-      index: index
-    };
+    //生成todolist删除的action
+    const action = deletelist(index);
     store.dispatch(action);
   };
   handleStoreChange = () => {
