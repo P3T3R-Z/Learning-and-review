@@ -1,7 +1,7 @@
-import {input_value_change, add_todo_item, item_delete} from "./actionType"
+import {input_value_change, add_todo_item, item_delete, init_todolist} from "./actionType"
 
 const defaultState = {
-  inputValue: "redux store默认值",
+  inputValue: "1",
   list: []
 };
 //state 存储的数据
@@ -13,7 +13,7 @@ reducer必须是纯函数,
 可以接受state,但绝对不能修改state
 */
 export default (state = defaultState, action) => {
-  console.log(state, action);
+  //console.log(state, action);
   //input输入事件
   if(action.type === input_value_change){
       //对state深拷贝
@@ -34,5 +34,16 @@ export default (state = defaultState, action) => {
     newState.list.splice(action.index, 1);
     return newState
   }
+  //初始todolist数据
+  if(action.type === init_todolist) {
+    
+    const newState = JSON.parse(JSON.stringify(state));
+    action.data.forEach((item) => {
+      newState.list.push(item.title)
+    });
+    console.log(newState)
+    return newState
+  }
+
   return state;  //store数据返回给react组件
 };

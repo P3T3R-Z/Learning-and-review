@@ -1,11 +1,19 @@
 //这是父级容器组件
+//容器组件与ui组件拆分
+/*
+  容器组件处理逻辑
+  ui组件处理渲染
+  容器组件作为ui组件的父组件, 传递对于所需的数据
+*/
 import React, { Component, Fragment } from "react";
 import { store } from "../store";
 import rdpng from "../assets/images/redux.png";
+import axios from "axios";
 import {
   input_value_change,
   add_todo_item,
-  item_delete
+  item_delete,
+  init_todolist
 } from "../store/actionType";
 import ReduxpageUi from "./reduxpage_ui";
 
@@ -37,11 +45,27 @@ class Rd extends Component {
           inputValue={this.state.inputValue}
           handleInputChange={this.handleInputChange}
           handleBtnclick={this.handleBtnclick}
-          list = {this.state.list}
-          itemDelete = {this.itemDelete}
+          list={this.state.list}
+          itemDelete={this.itemDelete}
         />
       </Fragment>
     );
+  }
+  //redux获取异步请求数据
+  componentDidMount() {
+    var api = "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20";
+    axios
+      .get(api)
+      .then(res => {
+        const action = {
+          type: init_todolist,
+          data: res.data.result
+        };
+        store.dispatch(action);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
   handleBtnclick = () => {
     const action = {
@@ -71,10 +95,3 @@ class Rd extends Component {
 }
 
 export default Rd;
-
-//容器组件与ui组件拆分
-/*
-  容器组件处理逻辑
-  ui组件处理渲染
-  容器组件作为ui组件的父组件, 传递对于所需的数据
-*/
