@@ -1,9 +1,13 @@
+//这是父级容器组件
 import React, { Component, Fragment } from "react";
-import { Input, Button, List } from "antd";
 import { store } from "../store";
 import rdpng from "../assets/images/redux.png";
-import {input_value_change, add_todo_item, item_delete} from "../store/actionType"
-
+import {
+  input_value_change,
+  add_todo_item,
+  item_delete
+} from "../store/actionType";
+import ReduxpageUi from "./reduxpage_ui";
 
 class Rd extends Component {
   constructor(props) {
@@ -16,45 +20,25 @@ class Rd extends Component {
     return (
       <Fragment>
         <pre>
-        redux核心api<br/>
-        createStore   创建store<br/>
-        store.dispatch   派发action, action传递给store<br/>
-        store.getState  获取store的数据<br/>
-        store.subscribe  订阅store的改变<br/>
+          redux核心api
+          <br />
+          createStore 创建store
+          <br />
+          store.dispatch 派发action, action传递给store
+          <br />
+          store.getState 获取store的数据
+          <br />
+          store.subscribe 订阅store的改变
+          <br />
         </pre>
         <img src={rdpng} alt="" style={{ display: "block" }} />
-        
-        <Input
-          placeholder="todolist"
-          style={{ width: "60%" }}
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-        />
-        <Button
-          type="primary"
-          style={{ marginLeft: "10px" }}
-          onClick={this.handleBtnclick}
-        >
-          添加
-        </Button>
-        <List
-          style={{ marginTop: "10px", width: "60%" }}
-          bordered
-          dataSource={this.state.list}
-          renderItem={(item, index) => (
-            <List.Item
-              actions={[
-                <Button
-                  shape="circle"
-                  icon="delete"
-                  onClick={this.itemDelete.bind(this, index)}
-                  size={"small"}
-                />
-              ]}
-            >
-              {item}
-            </List.Item>
-          )}
+        {/* 这是ui组件 */}
+        <ReduxpageUi
+          inputValue={this.state.inputValue}
+          handleInputChange={this.handleInputChange}
+          handleBtnclick={this.handleBtnclick}
+          list = {this.state.list}
+          itemDelete = {this.itemDelete}
         />
       </Fragment>
     );
@@ -87,3 +71,10 @@ class Rd extends Component {
 }
 
 export default Rd;
+
+//容器组件与ui组件拆分
+/*
+  容器组件处理逻辑
+  ui组件处理渲染
+  容器组件作为ui组件的父组件, 传递对于所需的数据
+*/
