@@ -2,7 +2,8 @@ import {input_value_change, add_todo_item, item_delete, init_todolist} from "./a
 
 const defaultState = {
   inputValue: "1",
-  list: []
+  list: [],
+  source:null,
 };
 //state 存储的数据
 //action 数据操作
@@ -41,7 +42,7 @@ export default (state = defaultState, action) => {
     action.data.forEach((item) => {
       newState.list.push(item.title)
     });
-    console.log(newState)
+    
     return newState
   }
 

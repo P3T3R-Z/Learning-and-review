@@ -31,6 +31,7 @@ class App extends Component {
             <Link to="/antdpage">antd</Link>
             <Link to="/trans">动画组件</Link>
             <Link to="/rd">redux</Link>
+            <Link to="/rdt">redux-thunk</Link>
           </div>
 
           {routers.map((item, index) => {

@@ -10,6 +10,7 @@ import Rightpage from "../component/rightpage";
 import Antdpage from "../component/antdpage"
 import Trans from "../component/transition"
 import Rd from "../component/reduxpage"
+import RdT from "../component/reduxpage_thunk"
 let routers = [
   { path: "/", component: Home, exact: true },
   { path: "/form", component: Form },
@@ -29,7 +30,9 @@ let routers = [
   },
   { path: "/antdpage", component: Antdpage },
   { path: "/trans", component: Trans },
-  { path: "/rd", component: Rd }
+  { path: "/rd", component: Rd },
+  { path: "/RdT", component: RdT }
+  
 ];
 
 export default routers;

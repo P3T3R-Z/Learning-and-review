@@ -12,18 +12,26 @@ export const getinitlist = value => ({
   data: value
 });
 //获取tidolist数据
-export const getinitdata = () => {
+export const getinitdata = (token) => {
   return (dispatch) => {
+    
     var api = "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20";
     axios
-      .get(api)
+      .get(api, {
+        cancelToken: token
+      })
       .then(res => {
         //获取请求数据, 创建action对象, 继续派发给store,
          const action = getinitlist(res.data.result);
          dispatch(action);
       })
       .catch(err => {
-        console.log(err);
+        //取消请求时触发
+        if (axios.isCancel(err)) {
+          console.log('Request canceled', err.message);
+        } else {
+          console.log(err)
+        }
       });
   };
 };
