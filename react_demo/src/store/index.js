@@ -11,6 +11,11 @@ applyMiddleware redux使用中间件
 import { createStore, applyMiddleware, compose } from "redux";
 import reducer from "./reducer";
 import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
+import todoSagas from "./sagas";
+
+
+
 
 //redux调试工具配置(非入侵式)
 const composeEnhancers =
@@ -21,17 +26,20 @@ const composeEnhancers =
     : compose;
 
 
-//添加redux-thunk中间件
+const sagaMiddleware = createSagaMiddleware() //创建sagamiddleware
+
+//添加中间件
 const enhancer = composeEnhancers(
-  applyMiddleware(thunk)
-  // other store enhancers if any
+  applyMiddleware(thunk),
+  applyMiddleware(sagaMiddleware) 
 );
 
 
 //创建store
 let store = createStore(reducer, enhancer);
 
-
+//redux-saga中间件执行saga
+sagaMiddleware.run(todoSagas)
 
 //开发环境配置
 

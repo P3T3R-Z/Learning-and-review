@@ -1,12 +1,11 @@
 
 import React, { Component, Fragment } from "react";
 import { store } from "../store";
-import rdpng from "../assets/images/redux.png";
-import axios from "axios";
+
 
 import ReduxpageUi from "./reduxpage_ui";
 import {
-  getinitlist,
+  get_init_list_saga,
   inputchange,
   addtodolist,
   deletelist
@@ -15,27 +14,12 @@ class RdS extends Component {
   constructor(props) {
     super(props);
     this.state = store.getState(); // 获取redux的数据
-    this.source = axios.CancelToken.source() //生成取消令牌用于组件卸载阻止axios请求
     store.subscribe(this.handleStoreChange); //订阅store数据改变,执行handleStoreChange
   }
 
   render() {
     return (
       <Fragment>
-        <pre>
-          redux核心api
-          <br />
-          createStore 创建store
-          <br />
-          store.dispatch 派发action, action传递给store
-          <br />
-          store.getState 获取store的数据
-          <br />
-          store.subscribe 订阅store的改变
-          <br />
-        </pre>
-        <img src={rdpng} alt="" style={{ display: "block" }} />
-        {/* 这是ui组件 */}
         <ReduxpageUi
           inputValue={this.state.inputValue}
           handleInputChange={this.handleInputChange}
@@ -48,29 +32,12 @@ class RdS extends Component {
   }
   
   componentDidMount() {
-    //生命周期中获取异步数据并生产action对象派发给store
-    var api = "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20";
-    var _t = this
-    axios
-      .get(api, {
-        cancelToken: _t.source.token
-      })
-      .then(res => {
-        //初始化todolist的action
-        const action = getinitlist(res.data.result);
-        store.dispatch(action);
-      })
-      .catch(err => {
-        //取消请求时触发
-        if (axios.isCancel(err)) {
-          console.log('Request canceled', err.message);
-        } else {
-          console.log(err)
-        }
-      });
+    //get_init_list_saga生成action, type为init_todolist
+    const action = get_init_list_saga();
+    //派发action到reducer, saga捕捉到此action对象,随后触发
+    store.dispatch(action)
   }
   componentWillUnmount(){
-    this.source.cancel('组件卸载,取消请求');
     this.setState = (state, callback) => {
       return
     }

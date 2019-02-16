@@ -1,4 +1,4 @@
-import {input_value_change, add_todo_item, item_delete, init_todolist} from "./actionType"
+import {input_value_change, add_todo_item, item_delete, init_todolist,init_todolist_saga} from "./actionType"
 
 const defaultState = {
   inputValue: "1",
@@ -43,6 +43,10 @@ export default (state = defaultState, action) => {
     });
     
     return newState
+  }
+
+  if(action.type === init_todolist_saga){
+    console.log('saga中也接收到了action, 但是reducer中不做处理,而是saga中进行异步操作')
   }
 
   return state;  //store数据返回给react组件

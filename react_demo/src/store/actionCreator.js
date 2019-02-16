@@ -3,7 +3,8 @@ import {
   input_value_change,
   add_todo_item,
   item_delete,
-  init_todolist
+  init_todolist,
+  init_todolist_saga
 } from "./actionType";
 import axios from "axios";
 //初始化todolist的action
@@ -11,7 +12,7 @@ export const getinitlist = value => ({
   type: init_todolist,
   data: value
 });
-//获取tidolist数据
+//redux-thunk的action中获取tidolist数据
 export const getinitdata = (token) => {
   return (dispatch) => {
     
@@ -50,3 +51,7 @@ export const deletelist = index => ({
   type: item_delete,
   index
 });
+//用于saga中间件的action
+export const get_init_list_saga = ()=>({
+  type: init_todolist_saga
+})
