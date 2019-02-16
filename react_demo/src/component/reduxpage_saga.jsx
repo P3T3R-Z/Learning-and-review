@@ -1,26 +1,41 @@
+
 import React, { Component, Fragment } from "react";
 import { store } from "../store";
+import rdpng from "../assets/images/redux.png";
 import axios from "axios";
+
 import ReduxpageUi from "./reduxpage_ui";
 import {
-  getinitdata,
+  getinitlist,
   inputchange,
   addtodolist,
   deletelist
 } from "../store/actionCreator";
-
-class RdT extends Component {
+class RdS extends Component {
   constructor(props) {
     super(props);
     this.state = store.getState(); // 获取redux的数据
-    this.source = axios.CancelToken.source() //用于取消请求凭证
+    this.source = axios.CancelToken.source() //生成取消令牌用于组件卸载阻止axios请求
     store.subscribe(this.handleStoreChange); //订阅store数据改变,执行handleStoreChange
   }
 
   render() {
     return (
       <Fragment>
-        
+        <pre>
+          redux核心api
+          <br />
+          createStore 创建store
+          <br />
+          store.dispatch 派发action, action传递给store
+          <br />
+          store.getState 获取store的数据
+          <br />
+          store.subscribe 订阅store的改变
+          <br />
+        </pre>
+        <img src={rdpng} alt="" style={{ display: "block" }} />
+        {/* 这是ui组件 */}
         <ReduxpageUi
           inputValue={this.state.inputValue}
           handleInputChange={this.handleInputChange}
@@ -33,12 +48,29 @@ class RdT extends Component {
   }
   
   componentDidMount() {
-    //方法2.使用redux-thunk中间件, 将异步获取数据函数放入actionCreator中 ,使得store可以接受函数
-    const action = getinitdata(this.source.token);
-    store.dispatch(action)
+    //生命周期中获取异步数据并生产action对象派发给store
+    var api = "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20";
+    var _t = this
+    axios
+      .get(api, {
+        cancelToken: _t.source.token
+      })
+      .then(res => {
+        //初始化todolist的action
+        const action = getinitlist(res.data.result);
+        store.dispatch(action);
+      })
+      .catch(err => {
+        //取消请求时触发
+        if (axios.isCancel(err)) {
+          console.log('Request canceled', err.message);
+        } else {
+          console.log(err)
+        }
+      });
   }
   componentWillUnmount(){
-    this.source.cancel('redux-thunk组件卸载,阻止请求')
+    this.source.cancel('组件卸载,取消请求');
     this.setState = (state, callback) => {
       return
     }
@@ -65,4 +97,4 @@ class RdT extends Component {
   };
 }
 
-export default RdT;
+export default RdS;

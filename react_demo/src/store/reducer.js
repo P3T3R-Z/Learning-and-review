@@ -3,7 +3,6 @@ import {input_value_change, add_todo_item, item_delete, init_todolist} from "./a
 const defaultState = {
   inputValue: "1",
   list: [],
-  source:null,
 };
 //state 存储的数据
 //action 数据操作
