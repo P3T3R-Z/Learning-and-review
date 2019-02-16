@@ -8,11 +8,11 @@
 import React, { Component, Fragment } from "react";
 import { store } from "../store";
 import rdpng from "../assets/images/redux.png";
-import axios from "axios";
+// import axios from "axios";
 
 import ReduxpageUi from "./reduxpage_ui";
 import {
-  getinitlist,
+  getinitdata,
   inputchange,
   addtodolist,
   deletelist
@@ -52,19 +52,25 @@ class Rd extends Component {
       </Fragment>
     );
   }
-  //redux获取异步请求数据
+  
   componentDidMount() {
-    var api = "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20";
-    axios
-      .get(api)
-      .then(res => {
-        //初始化todolist的action
-        const action = getinitlist(res.data.result);
-        store.dispatch(action);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    //方法1.生命周期中获取异步数据并生产action对象派发给store
+    // var api = "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20";
+    // axios
+    //   .get(api)
+    //   .then(res => {
+    //     //初始化todolist的action
+    //     const action = getinitlist(res.data.result);
+    //     store.dispatch(action);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+
+
+    //方法2.将异步获取数据函数放入actionCreator中, 使用redux-thunk,使得store可以接受函数
+    const action = getinitdata();
+    store.dispatch(action)
   }
   handleBtnclick = () => {
     //生成增加todolist的action
