@@ -32,8 +32,9 @@
 * git branch -d xx 删除分支
 * git branch -m xx aa 分支改名
 * git checkout xx 切换分支
+* git branch -a (展示所有的git分支)
+* git branch -r (展示远程分支)
 
-* git merge xx 合并分支
 
 > git stash是把当前未提交的修改暂存起来，让仓库还原到最后一次提交的状态。常用于更新、同步代码或者保存多个修改版本等情况下。
 * git stash save 'xxxx' 保存工作进度,之后还原最后一次提交状态
@@ -58,10 +59,14 @@ _本地配置忽略_
 * vim .gitignore vim编辑该文件 添加*.log 并保存退出
 * git add .gitignore 
 * git commit -m 'add.gitignore文件'
-* touch demo.log 创建了demo.log文件 git status查看已被忽略
-
+* touch demo.log 创建了demo.log文件 git status查看已被忽略<br/>
+----
+* git remote update origin --prune 刷新远程分支列表
 * git remote add origin xxxxx 远程版本库与本地版本库建立联系
 * git push -u origin master 将本地版本库master分支推送至远程 并追踪
+* git push origin master (省略了\<dst\>，等价于“git push origin master:master”，其中origin指定了你要push到哪个remote)<br/>
+我们一般写的形式为“ git push origin <src>:<dst> ”，冒号前表示local branch的名字，冒号后表示remote repository下 branch的名字。注意，如果你省略了<dst>，git就认为你想push到remote repository下和local branch相同名字的branch。
+* git push origin :mybranch （在origin repository里面查找mybranch，删除它。用一个空的去更新它，就相当于删除了）
 
 * git clone xxxx aa 克隆远程版本至aa文件
 
