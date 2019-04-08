@@ -1,17 +1,21 @@
-import _ from 'lodash';
+
 import "./style.css";
 import logo from "./image/demo-logo.png"
+import {cube} from "./math.js"
 
 function component() {
-    var element = document.createElement('div');
 
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-    element.classList.add('hello');
-
-    var demologo = new Image();
-    demologo.src = logo
-    element.appendChild(demologo);
-    return element;
+    var el2 = document.createElement('pre');
+    el2.innerHTML = "5 cube is equal to "+ cube(5)
+    el2.classList.add('hello');
+    return el2;
 }
 
 document.body.appendChild(component());
+
+if (module.hot) {
+    module.hot.accept('./print.js', function () {
+        console.log('Accepting the updated printMe module!');
+        printMe();
+    })
+}
