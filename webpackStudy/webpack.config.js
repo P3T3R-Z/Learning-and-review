@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
-
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 
 module.exports = {
@@ -29,7 +29,13 @@ module.exports = {
             title: '123'
         }),
         new webpack.NamedModulesPlugin(), //查看要修补的依赖
-        new webpack.HotModuleReplacementPlugin() //热模块替换插件
+        new webpack.HotModuleReplacementPlugin(), //热模块替换插件
+        new WorkboxPlugin.GenerateSW({
+            // these options encourage the ServiceWorkers to get in there fast 
+            // and not allow any straggling "old" SWs to hang around
+            clientsClaim: true,
+            skipWaiting: true
+        })
     ],
 
     output: {
@@ -52,7 +58,7 @@ module.exports = {
                 use: [
                     'file-loader'
                 ],
-                sideEffects: false   //设为false后dead code将会被删除
+                sideEffects: false //设为false后dead code将会被删除
             }
         ]
     }

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Header from "./header";
 import logo from "../assets/images/logo.svg";
-import "../assets/scss/index.scss"
+import "../assets/scss/index.scss";
+import Demo, {phoc} from "./phoc"
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -23,8 +25,10 @@ class Home extends Component {
   }
 
   render() {
+    const D = phoc(Demo)
     return (
       <div className="App">
+        <D/>
         <a>npm i node-sass 编译sass</a>
         <p>jsx图片模块引入</p>
         <img src={logo} className="App-logo" alt="logo" />
