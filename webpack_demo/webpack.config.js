@@ -4,7 +4,7 @@ module.exports = {
     entry: './src/index.js',
     mode: 'development',
     output: {
-        filename: 'main.js',
+        filename: '[name].[hash].js',
         path: path.resolve(__dirname, 'dist')   //相对路径转绝对
     },
     module: {
@@ -33,7 +33,7 @@ module.exports = {
                                 //     },
                                 //     stage: 3
                                 // })
-                                require('autoprefixer')({browsers:'last 5 version'})
+                                require('autoprefixer')({ browsers: 'last 5 version' })
                             ]
                         }
                     },
