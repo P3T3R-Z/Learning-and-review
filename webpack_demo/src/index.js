@@ -5,7 +5,7 @@ import './style/a.scss';
 
 function createDomElement(){
     let dom = document.createElement('div');
-    dom.innerHTML = _.join(['这是', '一个', '测试'], '');
+    dom.innerHTML = _.join(['这是1', '一个', '测试'], '');
     dom.classList.add('box')
     return dom;
 }
