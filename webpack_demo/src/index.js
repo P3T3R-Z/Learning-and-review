@@ -18,3 +18,25 @@ document.body.appendChild(divDom)
 var img=document.createElement("img");
 img.src=label;
 document.body.appendChild(img)
+
+
+
+// babel转es6+
+class demo{
+    show(){
+        console.log('this.age:', this.Age)
+    }
+    get Age(){
+        return this._age;
+    }
+    set Age(val){
+        this._age = val+1
+    }
+}
+
+let d = new demo();
+d.Age = 20;
+d.show();
+
+let [a, b, c] = [1,2,3];
+console.log(a, b, c)
