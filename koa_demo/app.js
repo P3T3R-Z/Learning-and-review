@@ -1,9 +1,24 @@
 var Koa = require('koa');
 var Router = require('koa-router')
+var views = require('koa-views');
+var postModule = require('./post_module')//原生node获取post表单数据
+var bodyParser = require('koa-bodyparser')
+
 
 
 var app = new Koa();
 var router = new Router()
+
+//以ejs后缀文件来渲染
+// app.use(views(__dirname, {
+//     extension: 'ejs'
+// }))
+//以html文件渲染
+app.use(views(__dirname + '/views', { map: { html: 'ejs' } }))
+
+//配置koa-bodyparser中间件
+app.use(bodyParser()) 
+
 
 
 //路由匹配顺序,类似洋葱剖面,以下顺序为 1-2-对应路由-4-5
@@ -12,7 +27,14 @@ var router = new Router()
 //2个参数表示匹配某个路由
 //1个表示匹配所有路由
 app.use(async (ctx, next) => {
-    console.log(1, '路由中间件')
+    console.log(1, '应用级中间件')
+
+    //ejs全局变量
+    ctx.state = {
+        username: '张三'
+    }
+
+
     await next()  /*当前路由匹配完成以后继续向下匹配 */
 
     console.log(5)
@@ -38,10 +60,18 @@ app.use(async (ctx, next) => {
 //ctx 上下文 包含了request和response
 router
     .get('/', async (ctx) => {
-        ctx.body = '首页'    //返回数据  相当于：原生的res.writeHead()  res.end
+
+        //ejs局部变量
+        let arr = [1,2,3,4];
+        let content = '<h2>带html标签文本</h2>'
+        await ctx.render('index', {
+            list: arr,
+            content
+        })
     })
     .get('/news', async ctx => {
-        ctx.body = '新闻页面'
+        ctx.body = '新闻页面'    //返回数据  相当于：原生的res.writeHead()  res.end
+        await ctx.render('news')
     })
     .get('/other', async ctx => {           //get传值
         ctx.body = ctx.request  //详情
@@ -51,10 +81,27 @@ router
         //2. 返回字符串
         console.log(ctx.querystring);
     })
+    .get('/login', async ctx => {           //get传值
+       await ctx.render('login')
+    })
     .get('/detail/:aid', async ctx => {       //动态路由
         console.log(ctx.params);
         ctx.body = `动态路由值:${JSON.stringify(ctx.params)}`
     })
+    .post('/api', async ctx=>{   //post请求获取
+
+        //原生node获取post
+        //var data=await postModule(ctx)
+
+        //koa-bodyparser获取post参数对象
+        var data = ctx.request.body
+        ctx.body = data
+    })
+
+
+
+
+
 
 
 //路由使用
