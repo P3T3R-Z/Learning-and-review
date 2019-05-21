@@ -1,10 +1,11 @@
 var Koa = require('koa');
+var path = require('path');
 var Router = require('koa-router')
 var views = require('koa-views');
 var postModule = require('./post_module')//原生node获取post表单数据
 var bodyParser = require('koa-bodyparser')
-
-
+var static = require('koa-static')
+var render = require('koa-art-template')
 
 var app = new Koa();
 var router = new Router()
@@ -14,10 +15,21 @@ var router = new Router()
 //     extension: 'ejs'
 // }))
 //以html文件渲染
-app.use(views(__dirname + '/views', { map: { html: 'ejs' } }))
+//app.use(views(__dirname + '/views', { map: { html: 'ejs' } }))
 
 //配置koa-bodyparser中间件
-app.use(bodyParser()) 
+app.use(bodyParser())
+
+//配置koa-static托管
+app.use(static(path.resolve(__dirname, './static')))
+
+//kao-art-template配置
+render(app, {
+    root: path.join(__dirname, 'views'),  //视图位置
+    extname: '.html',   //后缀名
+    debug: process.env.NODE_ENV !== 'production'  //调试
+})
+
 
 
 
@@ -28,6 +40,7 @@ app.use(bodyParser())
 //1个表示匹配所有路由
 app.use(async (ctx, next) => {
     console.log(1, '应用级中间件')
+
 
     //ejs全局变量
     ctx.state = {
@@ -62,9 +75,17 @@ router
     .get('/', async (ctx) => {
 
         //ejs局部变量
-        let arr = [1,2,3,4];
+        // let arr = [1, 2, 3, 4];
+        // let content = '<h2>带html标签文本</h2>'
+        // await ctx.render('index', {
+        //     list: arr,
+        //     content
+        // })
+
+        //art-template
+        let arr = [1, 2, 3, 4];
         let content = '<h2>带html标签文本</h2>'
-        await ctx.render('index', {
+        await ctx.render('index2', {
             list: arr,
             content
         })
@@ -82,13 +103,13 @@ router
         console.log(ctx.querystring);
     })
     .get('/login', async ctx => {           //get传值
-       await ctx.render('login')
+        await ctx.render('login')
     })
     .get('/detail/:aid', async ctx => {       //动态路由
         console.log(ctx.params);
         ctx.body = `动态路由值:${JSON.stringify(ctx.params)}`
     })
-    .post('/api', async ctx=>{   //post请求获取
+    .post('/api', async ctx => {   //post请求获取
 
         //原生node获取post
         //var data=await postModule(ctx)

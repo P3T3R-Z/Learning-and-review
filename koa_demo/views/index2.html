@@ -7,8 +7,8 @@
         <title>Document</title>
     </head>
     <body>
-        <h1>ejs模板</h1>
-        <% include head.html%>
+        <h1>koa-art-template模板</h1>
+        <% include('./head.html')%>
         <%for(var i=0;i<list.length;i++){%>
             <li><%=list[i]%></li>
         <%}%>
