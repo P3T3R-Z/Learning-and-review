@@ -42,7 +42,7 @@ app.use(async (ctx, next) => {
     console.log(1, '应用级中间件')
 
 
-    //ejs全局变量
+    //全局变量
     ctx.state = {
         username: '张三'
     }
@@ -89,10 +89,23 @@ router
             list: arr,
             content
         })
+
+        //cookie设置
+        ctx.cookies.set('userinfo', 'zhansna', {
+            maxAge: 1000*60
+        })
+        //中文cookie设置解决
+        //设置base64
+        var name = new Buffer('张三').toString('base64');
+        //base64转文字
+        var replacename = new Buffer('xxx', 'base64').toString()
     })
     .get('/news', async ctx => {
         ctx.body = '新闻页面'    //返回数据  相当于：原生的res.writeHead()  res.end
         await ctx.render('news')
+
+        //cookie获取
+        ctx.body = ctx.cookies.get('userinfo')
     })
     .get('/other', async ctx => {           //get传值
         ctx.body = ctx.request  //详情

@@ -1,4 +1,4 @@
-## ejs末班引擎的使用
+## ejs模板引擎的使用
 1. npm i koa-views --save
 2. npm i ejs --save
 3. var views = require('koa-views')
@@ -28,3 +28,14 @@
         extname: '.art',   //后缀名
         debug: process.env.NODE_ENV !== 'production'  //调试
    })
+
+
+## cookie使用
+ctx.cookie.set(key, value, {
+    maxAge: 60*1000*60,    //表示从Date.now()得到的毫秒数
+    expires: ,//过期的Date
+    path: ,//cookie路径,默认/
+    domain:,//域名
+    secure:, //默人false,true表示只有https访问
+    httpOnly:,//是否是服务器可访问的cookie, 默认true
+})
