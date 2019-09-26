@@ -12,11 +12,19 @@ var UserSchema = mongoose.Schema({
   status:{
       type: Number,
       default: 1 , //默认
-      
+      //max: 2                           //数据校验 max,min用于数字类型的数据
+      //min: 0
   },
   sn:{
     type: String,
-    index: true  //设置索引              //db.user.getIndexes() mongodb原生查看索引方法
+    index: true,  //设置索引              //db.user.getIndexes() mongodb原生查看索引方法
+    //enum: ['aaa', 'bbb']               //数据校验  枚举类型,用于字符串类型
+    //match: /^sn(.*)/,     //正则匹配
+    //maxlength: 最大值
+    //minlength: 最小值
+    // validate: function(){
+    //   return  desc.length >= 10     //自定义数据校验
+    // }
   },
   redirect:{
     type: String,
