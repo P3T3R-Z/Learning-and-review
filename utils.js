@@ -53,59 +53,66 @@ function leftTimeCookie(name, value, cookieDomain, days) {
     leftTime.toGMTString();
 }
 
-Date.prototype.Format = function(fmt) {
+var const dateFormat = function(fmt, timestamp) {
+  var _t = timestamp
+    ? new Date(timestamp * 1000)
+    : new Date(new Date().getTime());
   var o = {
-    "M+": this.getMonth() + 1, //月份
-    "d+": this.getDate(), //日
-    "h+": this.getHours(), //小时
-    "m+": this.getMinutes(), //分
-    "s+": this.getSeconds(), //秒
-    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-    S: this.getMilliseconds() //毫秒
+    "M+": _t.getMonth() + 1, //月份
+    "d+": _t.getDate(), //日
+    "h+": _t.getHours(), //小时
+    "m+": _t.getMinutes(), //分
+    "s+": _t.getSeconds(), //秒
+    "q+": Math.floor((_t.getMonth() + 3) / 3), //季度
+    S: _t.getMilliseconds() //毫秒
   };
   if (/(y+)/.test(fmt))
     fmt = fmt.replace(
       RegExp.$1,
-      (this.getFullYear() + "").substr(4 - RegExp.$1.length)
+      (_t.getFullYear() + "").substr(4 - RegExp.$1.length)
     );
   for (var k in o)
     if (new RegExp("(" + k + ")").test(fmt))
       fmt = fmt.replace(
         RegExp.$1,
-        RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)
+        RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)
       );
   return fmt;
-};
-//new Date(new Date().getTime()).Format('yyyy-MM-dd')
-//new Date(1551872469*1000).Format('yyyy-MM-dd')
-// 判断时间差30min
-function timeDiff(newdate, olddate) {
+}
+
+// 判断时间差
+function timeDiff(newdate, olddate, limit) {
   if (newdate > olddate) {
     var timestamp_diff = newdate * 1000 - olddate * 1000;
-    return timestamp_diff / 1000 > 60 * 30; //大于半小时
+    return timestamp_diff / 1000 > 60 * limit; //大于limit分鐘
   } else {
     var timestamp_diff = olddate * 1000 - newdate * 1000;
-    return timestamp_diff / 1000 > 60 * 30; //大于半小时
+    return timestamp_diff / 1000 > 60 * limit; //大于limit分鐘
   }
 }
 //前或后几日数组
-function getBeforetime(n) {
-  var d = new Date();
+function timearray(n, starttime) {
+  var d = starttime || new Date().getTime();
   var timearray = [];
   for (var i = 0; i < Math.abs(n); i++) {
     var dd = d;
-    dd = n < 0 ? dd - 1000 * 60 * 60 * 24 * i : dd + 1000 * 60 * 60 * 24 * i;
+    dd =
+      n < 0 ? dd - 1000 * 60 * 60 * 24 * i : dd + 1000 * 60 * 60 * 24 * i;
     dd = new Date(dd);
     var year = dd.getFullYear();
     var mon = dd.getMonth() + 1;
     var day = dd.getDate();
+    var weekday = dd.getDay() == 0?7: dd.getDay();
     var s =
       year +
       "-" +
       (mon < 10 ? "0" + mon : mon) +
       "-" +
       (day < 10 ? "0" + day : day);
-    timearray.push(s);
+    timearray.push({
+      time: s,
+      day: weekday
+    });
   }
   return n < 0 ? timearray.reverse() : timearray;
 }
@@ -310,28 +317,42 @@ function pureHtml(oldhtml) {
   return oldhtml.replace(r, "<div>");
 }
 
-function scrollAnimation(currentY, targetY) {
-  // 获取当前位置方法
+//滾動動畫, dom為滾動節點
+const scrollAnimation = function(currentY, targetY, dom) {
   // const currentY = document.documentElement.scrollTop || document.body.scrollTop
-
   // 计算需要移动的距离
+  var _dom = dom
+  dom = !dom?window:document.querySelector(dom)
+  // if(dom != window){
+  //   dom.scrollTop = targetY
+  //   return
+  // }
   let needScrollTop = targetY - currentY;
   let _currentY = currentY;
   setTimeout(() => {
     // 一次调用滑动帧数，每次调用会不一样
     const dist = Math.ceil(needScrollTop / 10);
     _currentY += dist;
-    window.scrollTo(_currentY, currentY);
+    if(dom == window){
+      dom.scrollTo(_currentY, currentY);
+    }else{
+      dom.scrollTop = _currentY
+    }
+    
     // 如果移动幅度小于十个像素，直接移动，否则递归调用，实现动画效果
     if (needScrollTop > 10 || needScrollTop < -10) {
-      scrollAnimation(_currentY, targetY);
+      scrollAnimation(_currentY, targetY, _dom);
     } else {
-      window.scrollTo(_currentY, targetY);
+     
+      if(dom == window){
+        dom.scrollTo(_currentY, targetY);
+      }else{
+        dom.scrollTop = targetY
+      }
     }
   }, 1);
-}
-// const currentY = document.documentElement.scrollTop || document.body.scrollTop
-// scrollAnimation(currentY, 0)
+};
+
 
 //去掉html标签
 function removeHtmlTab(tab) {
@@ -545,4 +566,135 @@ function IsMobile(str) {
   } else {
     return false;
   }
+}
+
+const cssSupport = function(attr, value) {
+  var element = document.createElement("div");
+  if (attr in element.style) {
+    element.style[attr] = value;
+    return element.style[attr] === value;
+  } else {
+    return false;
+  }
+};
+
+//去除結尾多餘的0; 12.02300->12.023
+const formatCounts = counts => {
+  try {
+    var matchcounts = counts.toString().match(/^(\d+)\.?(\d*)/);
+
+    //整数
+    var f = parseInt(matchcounts[1]);
+    //小数
+    var s =
+      matchcounts[2].match(/\d*[^0]/) != null
+        ? "." + matchcounts[2].match(/\d*[^0]/)
+        : "";
+    return f + s;
+  } catch (e) {
+    console.log(e.message);
+    return counts;
+  }
+};
+
+const arrayBufferToBase64 = buffer => {
+  var binary = "";
+  var bytes = new Uint8Array(buffer);
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+};
+
+const isUsercard=(code)=> {
+  var idcardReg = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+  if (!idcardReg.test(code)) {
+     return false
+  }
+  return true
+}
+
+const pwdStrength = value => {
+  var pwdregexp = (min, max) => {
+     return (
+        '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{'+min+','+max+'}$'
+     );
+  };
+
+  // var strength = 0;
+
+  // strength+= value.match(/\d+/g)? value.match(/\d+/g).length :0
+  // strength+= value.match(/[a-z]+/g)?value.match(/[a-z]+/g).length :0
+  // strength+= value.match(/[A-Z]+/g)?value.match(/[A-Z]+/g).length :0
+  // strength+= value.match(/[\W_!@#$%^&*`~()-+=]+/g)?value.match(/[\W_!@#$%^&*`~()-+=]+/g).length :0
+
+  // switch (true) {
+  //   case strength<=2 && strength>0:
+  //     return "低";
+  //   case strength===3:
+  //     return "中";
+  //   case strength>=4:
+  //     return "高";
+  //   default:
+  //     return '不符合规则'
+  // }
+  var level1 = new RegExp(pwdregexp(8, 10)),
+     level2 = new RegExp(pwdregexp(10, 12)),
+     level3 = new RegExp(pwdregexp(12, 20));
+
+  if (value.length < 8) {
+     return '不符合规则'
+  }
+
+  if (level1.test(value)) {
+     return "低";
+  } else if (level2.test(value)) {
+     return "中";
+  } else if (level3.test(value)) {
+     return "高";
+  } else {
+     return "不符合规则";
+  }
+};
+
+const isPwd = function (pwd) {
+  var pwdregexp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$/
+  //var pwdregexp = /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]{8,20}$/;
+  if (!pwdregexp.test(pwd)) {
+     return false;
+  }
+  return true;
+};
+
+var telco=function(input) {
+  if (input.length == 11) {
+
+    var isChinaMobile = /^((134)|(135)|(136)|(137)|(138)|(139)|(147)|(150)|(151)|(152)|(157)|(158)|(159)|(178)|(182)|(183)|(184)|(187)|(188)|(198))\d{8}$/g;
+    var isChinaUnion = /^((130)|(131)|(132)|(155)|(156)|(145)|(185)|(186)|(176)|(175)|(170)|(171)|(166))\d{8}$/g;
+    var isChinaTelcom = /^((133)|(153)|(173)|(177)|(180)|(181)|(189)|(199))\d{8}$/g;
+
+    if (isChinaMobile.test(input)) {
+      return "中国移动";
+    } else if (isChinaUnion.test(input)) {
+      return "中国联通";
+    } else if (isChinaTelcom.test(input)) {
+      return "中国电信";
+    }
+
+  }
+  return ''
+};
+
+
+
+var countDown=function(starttime, endtime) {
+  var n = parseInt(Date.now() / 1000),
+    o = 0;
+  if (starttime && (o = starttime > n ? starttime - n : n - starttime, o = parseInt(o)), endtime && (o = parseInt(endtime)), 0 == o) return !1;
+  var i = Math.floor(o / 86400),
+    a = Math.floor((o - 24 * i * 60 * 60) / 3600),
+    r = Math.floor((o - 24 * i * 60 * 60 - 3600 * a) / 60),
+    s = Math.floor(o - 24 * i * 60 * 60 - 3600 * a - 60 * r);
+  return [i, a < 10 ? "0" + a : a, r < 10 ? "0" + r : r, s < 10 ? "0" + s : s];
 }
