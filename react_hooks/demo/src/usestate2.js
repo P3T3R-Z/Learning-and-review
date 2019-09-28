@@ -5,8 +5,9 @@ function Example2() {
   const [work, setWork] = useState("c");
   return (
     <div>--------------<br/>
-      useState: 多状态声明的注意事项
-      在使用useState的时候只赋了初始值，并没有绑定任何的key,那React是怎么保证这三个useState找到它自己对应的state呢？
+      <h1>      useState: 多状态声明的注意事项
+</h1>
+      在使用useState的时候只赋了初始值，并没有绑定任何的key,那React是怎么保证这三个useState找到它自己对应的state呢？<br/>
       答案是：React是根据useState出现的顺序来确定的
       <p>a 今年:{age}岁</p>
       <p>b:{sex}</p>

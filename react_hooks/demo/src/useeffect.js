@@ -8,7 +8,7 @@ function example3() {
     <div>
       --------------
       <br />
-      用useEffect函数来代替生命周期函数
+      <h1>用useEffect函数来代替生命周期函数</h1>
       <p>You clicked {count} times</p>
       <button
         onClick={() => {

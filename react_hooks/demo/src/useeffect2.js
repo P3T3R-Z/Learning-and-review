@@ -35,11 +35,12 @@ function example4() {
   return (
     <div>
       -------------- <br/>
-      useeffect解绑: <br/>相当于执行componentWillUnmount
+      <h1>useEffect解绑</h1>
+      相当于执行componentWillUnmount
       useEffect 返回一个函数的形式进行解绑, useEffect第二个参数填入数组,数组中为解绑的数据
       <p>You clicked {count} times</p>
       <button onClick={()=>{setCount(count+1)}}>click me</button>
-      点击后触发useeffect副作用,同时执行解绑
+      点击后触发useeffect副作用,同时执行解绑 看console.log
       <br />
       <Router>
         <ul>
