@@ -10,7 +10,7 @@ function ReducerDemo(){
             default:
                 return state
         }
-    },0)
+    },0)  //第二个参数为初始值
     return (
        <div>-----------<br/>
            <h1>useReducer</h1>

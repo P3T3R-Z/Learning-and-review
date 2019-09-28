@@ -6,7 +6,8 @@ import Useeffect from "./useeffect"
 import Useeffect2 from "./useeffect2";
 import Createcontext from "./createContext";
 import Usereducer from "./useReducer";
-import Usereducer2 from "./useReducer/index"
+import Usereducer2 from "./useReducer/index";
+import Usememo from "./usememo/index"
 class App extends Component {
   render() {
     return (
@@ -18,6 +19,7 @@ class App extends Component {
         <Createcontext/>
         <Usereducer/>
         <Usereducer2/>
+        <Usememo/>
       </div>
     );
   }
