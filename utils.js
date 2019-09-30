@@ -827,13 +827,46 @@ var getCorrectResult = function(type, num1, num2, result) {
 };
 /////////////////////////////////////////////////////////
 //用法
-加法： accAdd(0.1, 0.2)  // 得到结果：0.3
-减法： accSub(1, 0.9)    // 得到结果：0.1
-除法： accDiv(2.2, 100)  // 得到结果：0.022
-乘法： accMul(7, 0.8)    // 得到结果：5.6
+//加法：
+ accAdd(0.1, 0.2)  // 得到结果：0.3
+//减法： 
+accSub(1, 0.9)    // 得到结果：0.1
+//除法： 
+accDiv(2.2, 100)  // 得到结果：0.022
+//乘法： 
+accMul(7, 0.8)    // 得到结果：5.6
  
  
 countDecimals()//方法：计算小数位的长度
 convertToInt()//方法：将小数转成整数
 getCorrectResult()//方法：确认我们的计算结果无误，以防万一
 /////////////////////////////////////////////////////
+
+//web图片保存
+function savePicture(Url) {
+  var blob = new Blob([""], { type: "application/octet-stream" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = Url;
+  a.download = Url.replace(/(.*\/)*([^.]+.*)/gi, "$2").split("?")[0];
+  var e = document.createEvent("MouseEvents");
+  e.initMouseEvent(
+    "click",
+    true,
+    false,
+    window,
+    0,
+    0,
+    0,
+    0,
+    0,
+    false,
+    false,
+    false,
+    false,
+    0,
+    null
+  );
+  a.dispatchEvent(e);
+  URL.revokeObjectURL(url);
+}
