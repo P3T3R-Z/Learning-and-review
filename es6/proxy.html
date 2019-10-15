@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+
+      //set get用法
+    //   let obj = {};
+    //   let handler = {
+    //     get(target, property) {
+    //       console.log(`${property} 被读取`);
+    //       return property in target ? target[property] : 3;
+    //     },
+    //     set(target, property, value) {
+    //       console.log(`${property} 被设置为 ${value}`);
+    //       target[property] = value;
+    //     }
+    //   };
+
+    //   let p = new Proxy(obj, handler);
+    //   p.name = "tom"; //name 被设置为 tom
+    //   p.age; //age 被读取 3
+
+
+      //Proxy.revocable() 方法可以用来创建一个可撤销的代理对象。
+      //语法  Proxy.revocable(target, handler);
+      /*
+        target
+        用Proxy包装的目标对象（可以是任何类型的对象，包括原生数组，函数，甚至另一个代理）。
+        handler
+        一个对象，其属性是当执行一个操作时定义代理的行为的函数。
+        */
+      //返回值  返回一个包含了所生成的代理对象本身以及该代理对象的撤销方法的对象。
+
+        var obj={}
+      var revocable = Proxy.revocable(obj, {
+                        get(target, name) {
+                            return "[[" + name + "]]";
+                        }
+                     });
+                        var proxy = revocable.proxy;
+                        console.log(proxy.foo);              // "[[foo]]"
+
+                         //revocable.revoke();     // 执行撤销方法
+
+                        // proxy.foo;              // TypeError
+                        // proxy.foo = 1           // 同样 TypeError
+                        // delete proxy.foo;       // 还是 TypeError
+                        // typeof proxy            // "object"，因为 typeof 不属于可代理操作
+
+    </script>
+  </body>
+</html>
