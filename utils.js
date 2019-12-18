@@ -53,7 +53,7 @@ function leftTimeCookie(name, value, cookieDomain, days) {
     leftTime.toGMTString();
 }
 
-var const dateFormat = function(fmt, timestamp) {
+var dateFormat = function(fmt, timestamp) {
   var _t = timestamp
     ? new Date(timestamp * 1000)
     : new Date(new Date().getTime());
