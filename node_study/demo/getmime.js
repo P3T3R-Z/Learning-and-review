@@ -13,7 +13,7 @@
 
 var fs=require('fs');
 var filearr={}
-filearr=fs.readFileSync("./mime.json")
+filearr=fs.readFileSync("./demo/mime.json")
 filearr=JSON.parse(filearr.toString())
 
 exports.extname=function(file){

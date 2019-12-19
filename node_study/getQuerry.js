@@ -6,17 +6,23 @@ var http=require('http');
 var url=require('url');
 var fs=require("fs")
 var ejs =require('ejs')
+
+var path=require('path');
+var url=require('url')
+var getmime = require('./demo/getmime');
+
+
 http.createServer(function(req,res){
     res.writeHead(200, {"Content-Type":"text/html:charset='urf-8'"});//设置http头部
 
-    
-    if(req.url!='/favicon.ico'){
+    var pathname=url.parse(req.url).pathname; //去除参数
+    if(pathname!='/favicon.ico'){
        
 
 
 
-        if(req.url=='/'){
-            console.log(url.parse(req.url, true))                     //get传值
+        if(pathname=='/'){
+            console.log(url.parse(pathname, true))                     //get传值
             res.writeHead(200,{"Content-Type":"text/html;charset='utf-8'"})
             var emojidata=fs.readFileSync('1.txt');
             ejs.renderFile('./index.html',{list:[1,2,3],emojidata},(error,data)=>{
@@ -36,7 +42,7 @@ http.createServer(function(req,res){
             // })
         }
 
-        if(req.url=='/login'){
+       else if(pathname=='/login'){
             let postData=''                     //post传值
             req.on( 'data',  function (postDataChunk) {
             postData += postDataChunk;
@@ -48,7 +54,31 @@ http.createServer(function(req,res){
             }  catch (e) { }
                 console.log( postData);
             });
+        } else {
+
+
+              //获取文件的后缀
+                var endname=path.extname(pathname);
+                //获取文件类型
+                var filetype=getmime.extname(endname)
+             
+                fs.readFile('./'+pathname, (err,data)=>{
+                    if(err){
+                    
+                        console.log(err)
+                        res.end()
+                       return
+                    }else{
+                        res.writeHead(200,{"Content-Type":filetype+";charset='utf-8'"})
+                        res.write(data)
+                        res.end()
+                    }
+
+                })
+
         }
+        
+      
         
     }
     
