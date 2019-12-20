@@ -24,7 +24,7 @@ http.createServer(function(req,res){
         if(pathname=='/'){
             console.log(url.parse(pathname, true))                     //get传值
             res.writeHead(200,{"Content-Type":"text/html;charset='utf-8'"})
-            var emojidata=fs.readFileSync('1.txt');
+            var emojidata=fs.readFileSync('2.txt');
             ejs.renderFile('./index.html',{list:[1,2,3],emojidata},(error,data)=>{
                 
                 
