@@ -870,3 +870,304 @@ function savePicture(Url) {
   a.dispatchEvent(e);
   URL.revokeObjectURL(url);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 转换日期
+ * 2018-11-12 17:20:35 => 11月12日
+ */
+export const transferDate = (date) => {
+
+  /** 苹果下会因为中间带空格,而导致 nan */
+  let time = new Date(date.replace(/\-/g, '/').split(' '));
+
+  let now = new Date();
+
+  const year = now.getFullYear() === time.getFullYear() ? `` : `${time.getFullYear()}年`;
+
+  return `${year}${time.getMonth() + 1}月${time.getDate()}日`;
+};
+
+/**
+* 动态计算根字体
+*/
+export function setRootFontSize() {
+  // 屏幕适配
+  const docEl = document.documentElement;
+  const resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+
+  const recalc = function () {
+      // 设置根字体大小
+      if (docEl.clientWidth > 750) {
+          docEl.style.fontSize = '50px';
+      } else {
+          docEl.style.fontSize = `${100 * (docEl.clientWidth / 750)}px`;
+      }
+
+  };
+
+  window.addEventListener(resizeEvt, recalc, false);
+
+  recalc();
+}
+
+// 滚动条在Y轴上的滚动距离
+
+export function getScrollTop() {
+  let scrollTop = 0; let bodyScrollTop = 0; let
+      documentScrollTop = 0;
+  if (document.body) {
+      bodyScrollTop = document.body.scrollTop;
+  }
+  if (document.documentElement) {
+      documentScrollTop = document.documentElement.scrollTop;
+  }
+  scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+  return scrollTop;
+}
+
+// 文档的总高度
+
+export function getScrollHeight() {
+  let scrollHeight = 0; let bodyScrollHeight = 0; let
+      documentScrollHeight = 0;
+  if (document.body) {
+      bodyScrollHeight = document.body.scrollHeight;
+  }
+  if (document.documentElement) {
+      documentScrollHeight = document.documentElement.scrollHeight;
+  }
+  scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+  return scrollHeight;
+}
+
+// 浏览器视口的高度
+
+export function getWindowHeight() {
+  let windowHeight = 0;
+  if (document.compatMode === 'CSS1Compat') {
+      windowHeight = document.documentElement.clientHeight;
+  } else {
+      windowHeight = document.body.clientHeight;
+  }
+  return windowHeight;
+}
+
+const expressionWords = '[微笑][撇嘴][色][发呆][得意][流泪][害羞][闭嘴][睡][大哭][尴尬][发怒][调皮][呲牙][惊讶][难过][酷][冷汗][抓狂][吐][偷笑][愉快][白眼][傲慢][饥饿][困][惊恐][流汗][憨笑][悠闲][奋斗][咒骂][疑问][嘘][晕][疯了][衰][骷髅][敲打][再见][擦汗][抠鼻][鼓掌][糗大了][坏笑][左哼哼][右哼哼][哈欠][鄙视][委屈][快哭了][阴险][亲亲][吓][可怜][菜刀][西瓜][啤酒][篮球][乒乓][咖啡][饭][猪头][玫瑰][凋谢][嘴唇][爱心][心碎][蛋糕][闪电][炸弹][刀][足球][瓢虫][便便][月亮][太阳][礼物][拥抱][强][弱][握手][胜利][抱拳][勾引][拳头][差劲][爱你][NO][OK][爱情][飞吻][跳跳][发抖][怄火][转圈][磕头][回头][跳绳][投降]';
+// http://tapd.oa.com/10117011/bugtrace/bugs/view?bug_id=1010117011056684189&url_cache_key=8eddc61366ed4bd8807c273dc0f252a2
+// 避开带"[]"的字符带来无匹配表情的问题
+const exoressionRegExp = /\[(\d|\D)*?\]/g;
+const expressionItems = expressionWords.match(exoressionRegExp);
+const expressionList = [];
+const expressionMap = {};
+expressionItems.forEach((item, index) => {
+  const config = {
+      msg: item,
+      index: index,
+      clazz: 'expression-' + (index + 1) + '-2x',
+      src: './img/Expression_' + (index + 1) + '@2x.png'
+  };
+  expressionList.push(config);
+  expressionMap[item] = config;
+});
+
+export const EXPRESSION_CONFIG = {
+  REG_EXP: exoressionRegExp,
+  LIST: expressionList,
+  MAP: expressionMap
+};
+
+/**
+* @deprecated 富文本相关使用 components/render-rich-text
+*/
+export const revertWordToImage = (text = '') => {
+  let result = text;
+  const expressionMatched = text.match(EXPRESSION_CONFIG.REG_EXP);
+  if (expressionMatched && expressionMatched.length) {
+      expressionMatched.forEach(expWord => {
+          const expConfigItem = EXPRESSION_CONFIG.MAP[expWord];
+          if (expConfigItem) {
+              // const img = '<img class=\'expression\' src=' + expConfigItem.src + ' />';
+
+              const img = `<i class="Expression_${expConfigItem.index + 1}"></i>`;
+              result = result.replace(expWord, img);
+          }
+      });
+  }
+  return result;
+};
+
+/**
+* 将 \n 换成 br 表情
+* @deprecated 富文本相关使用 components/render-rich-text
+* @param text
+*/
+export const revertBr = (text = '') => {
+  return text.replace(/\n/g, '<br />');
+};
+
+/** 对象去重,key 为判断是否重复的字段 */
+export const dupFilter = function (arr, key) {
+
+  let temp = {};
+
+  return arr.filter((item) => {
+
+      if (!temp[item[key]]) {
+
+          temp[item[key]] = true;
+
+          return true;
+
+      } else {
+
+          return false;
+
+      }
+
+  });
+
+};
+
+
+/**
+* 点赞数量显示
+*/
+export const giveLikeNumber = (num) => {
+  if (num > 100000) {
+      return '10w+';
+  }
+  if (num >= 10000) {
+      return `${(num / 10000).toFixed(1)}w`;
+  }
+  if (num >= 1000) {
+      const fixedNum = (num / 1000).toFixed(1);
+      const res = fixedNum > 9.9 ? 9.9 : fixedNum;
+      return `${res}k`;
+  }
+  return num;
+};
+
+/**
+* 客户端判断
+*/
+export const judgeClient = () => {
+  let u = navigator.userAgent;
+  let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;   // 判断是否是 android终端
+  let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);     // 判断是否是 iOS终端
+  console.log('是否是Android：' + isAndroid); // true,false
+  console.log('是否是iOS：' + isIOS);
+  if (isAndroid) {
+      document.body.setAttribute('id', 'android-effect');
+  } else if (isIOS) {
+      return 'IOS';
+  } else {
+      return 'PC';
+  }
+};
+
+/**
+*  时间戳转化为 xxx年xxx月xxx日 xxx时xxx分xxx秒
+*  @param {string} timestamp
+*/
+export const timeTranslate = (timestamp) => {
+
+  if (!timestamp) {
+      return '';
+  }
+
+  // Safari 不能解析 YYYY-MM-DD hh:mm:ss，这里改成时间戳
+  const date = new Date(timestamp * 1000);
+
+  const year = date.getFullYear();
+  const month = changeSingleDigits(date.getMonth() + 1);
+  const day = changeSingleDigits(date.getDate());
+  const hours = changeSingleDigits(date.getHours());
+  const min = changeSingleDigits(date.getMinutes());
+  const seconds = changeSingleDigits(date.getSeconds());
+
+  return `${year}年${month}月${day}日 ${hours}时${min}分${seconds}秒`;
+};
+
+/**
+* 个位数字前面加 0
+* @param string
+*/
+export const changeSingleDigits = (string) => {
+
+  if (String.prototype.padStart) {
+      return string.toString().padStart(2, '0');
+  }
+
+  return string < 10 ? '0' + string : string;
+};
+
+
+
+/**
+* pc 文本多行省略
+* @param {el} 当前元素
+* @param {str} 文本字符串
+* @param {num} 减少的字数数量
+*/
+
+export const multipleOmit = function (el, str, num = 5) {
+  for (let i = 0; i <= str.length; i++) {
+      el.textContent = str.slice(0, i);
+      if (el.scrollHeight > el.offsetHeight) {
+          el.textContent = str.slice(0, i - num) + '...';
+          break;
+      }
+  }
+};
+
+
+/**
+* 获取URL上某个参数
+* @param {str} 要获取的参数
+*/
+export const getUrlParam = (param) => {
+  const url = new URL(location.href);
+  return url.searchParams.get(param);
+};
+
+// support.qq.com 链接跳转
+export const skipLinks = (item) => {
+  let homeHref = `/products/${item.product_id}/${location.search}`;
+  let personalHref = `/products/${item.product_id}/profile/${item.user_id}/`;
+  let postHref = `/products/${item.product_id}/post/${item.f_title_id}/${location.search}`;
+  let prefixUrl = 'https://support.qq.com';
+  homeHref = `${prefixUrl}${homeHref}`;
+  personalHref = `${prefixUrl}${personalHref}`;
+  postHref = `${prefixUrl}${postHref}`;
+  return {
+      homeHref,
+      personalHref,
+      postHref
+  };
+};
+
+/**
+* 计算字符长度，支持汉字
+* @param {string} str
+* @return {number}
+*/
+export const strLen = (str) => {
+  // 把双字节字符转化成两个*，便于计算长度
+  // eslint-disable-next-line no-control-regex
+  return str.replace(/[^\x00-\xff]/g, '**').length;
+};
