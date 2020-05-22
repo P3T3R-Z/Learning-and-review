@@ -1171,3 +1171,26 @@ export const strLen = (str) => {
   // eslint-disable-next-line no-control-regex
   return str.replace(/[^\x00-\xff]/g, '**').length;
 };
+
+
+export function deepCopy(obj1) {
+  var obj2 = Array.isArray(obj1) ? [] : {};
+  if (obj1 && typeof obj1 === "object") {
+    for (var i in obj1) {
+      var prop = obj1[i]; // 避免相互引用造成死循环，如obj1.a=obj
+      if (prop == obj1) {
+        continue;
+      }
+      if (obj1.hasOwnProperty(i)) {
+        // 如果子属性为引用数据类型，递归复制
+        if (prop && typeof prop === "object") {
+          obj2[i] = (prop.constructor === Array) ? [] : Object.create(prop);
+        } else {
+          // 如果是基本数据类型，只是简单的复制
+          obj2[i] = prop;
+        }
+      }
+    }
+  }
+  return obj2;
+}
