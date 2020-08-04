@@ -188,8 +188,8 @@ gulp.task("build", function (cb) {
     "csstask:build",
     "copyIgnore",
     "revAppend",
-    "server",
-    "watch"
+    // "server",
+    // "watch"
   )(cb);
 });
 
