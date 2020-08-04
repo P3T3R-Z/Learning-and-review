@@ -1,26 +1,31 @@
-const static_src = "src", //源目录
-  build_src = "build"; //输出目录
+const public_path = "src", //源码入口
+  assets_path = public_path + "/assets", //静态文件目录
+  ignore_path = public_path + "/static", //无需额外处理的文件目录
+  build_path = "build", //输出目录
+  build_assets_path = build_path+ "/assets",
+  build_static_path = build_path+ "/static";
 const source = {
-  //忽略
-  ignore: [`!${static_src}/_*.scss`,`!${static_src}/*.min.js`,`!${static_src}/**/*.min.js`],
   //忽略源
-  ignorefile:[`${static_src}/_*.scss`,`${static_src}/*.min.js`,`${static_src}/**/*.min.js`],
+  ignorefile: [`${ignore_path}/*.*`],
   //匹配源
-  js_src: [`${static_src}/**/*.js`, `${static_src}/*.js`],
-  html_src: [`${static_src}/**/*.html`, `${static_src}/*.html`],
-  scss_src: [
-    `${static_src}/**/*.scss`,
-    `${static_src}/*.scss`,
-    `${static_src}/*.css`,
-    `${static_src}/**/*.css`
+  js_path: [`${assets_path}/**/*.js`, `${assets_path}/*.js`],
+  html_path: [`${public_path}/**/*.html`, `${public_path}/*.html`],
+  style_path: [
+    `${assets_path}/**/*.scss`,
+    `${assets_path}/*.scss`,
+    `${assets_path}/*.css`,
+    `${assets_path}/**/*.css`,
   ],
-  img_src: [
-    `${static_src}/**/*.png`,
-    `${static_src}/**/*.jpg`,
-    `${static_src}/**/*.gif`
+  img_path: [
+    `${assets_path}/**/*.png`,
+    `${assets_path}/**/*.jpg`,
+    `${assets_path}/**/*.jpeg`,
+    `${assets_path}/**/*.gif`,
   ],
-  //输出根地址
-  build_src: build_src
+  //输出地址
+  build_path,
+  build_assets_path,
+  build_static_path
 };
 
 module.exports = source;

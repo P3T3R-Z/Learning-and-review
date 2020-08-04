@@ -4,7 +4,7 @@ const gulp = require("gulp"),
   sass = require("gulp-sass"),
   connect = require("gulp-connect"),
   gulpSequence = require("gulp-sequence"),
-  changed = require("gulp-changed"),//筛选出修改过的资源
+  changed = require("gulp-changed"), //筛选出修改过的资源
   clean = require("gulp-clean"),
   uglify = require("gulp-uglify"),
   //rename = require("gulp-rename"),
@@ -29,161 +29,145 @@ const gulp = require("gulp"),
 */
 
 //清空build目录
-gulp.task("clean:build", function(cb) {
+gulp.task("clean:build", function (cb) {
   return gulp
-    .src(source.build_src, {
-      read: false
+    .src(source.build_path, {
+      read: false,
     })
     .pipe(clean());
 });
 
-gulp.task("jstask", function() {
-  return (
-    gulp
-      .src([...source.ignore, ...source.js_src])
-      .pipe(
-        changed(source.build_src, {
-          extension: ".js"
-        })
-      )
-      .pipe(
-        babel({
-          presets: ["es2015"]
-        })
-      )
-      .on("error", function(err) {
-        gutil.log(gutil.colors.red("[Error]"), err.toString());
+gulp.task("jstask", function () {
+  return gulp
+    .src([...source.js_path])
+    .pipe(
+      changed(source.build_assets_path, {
+        extension: ".js",
       })
-      .pipe(gulp.dest(source.build_src))
-  );
-});
-
-gulp.task("jstask:build", function() {
-  return (
-    gulp
-      .src([...source.ignore, ...source.js_src])
-      .pipe(
-        changed(source.build_src, {
-          extension: ".js"
-        })
-      )
-      .pipe(
-        babel({
-          presets: ["es2015"]
-        })
-      )
-      .pipe(uglify())
-      .on("error", function(err) {
-        gutil.log(gutil.colors.red("[Error]"), err.toString());
+    )
+    .pipe(
+      babel({
+        presets: ["es2015"],
       })
-      .pipe(gulp.dest(source.build_src))
-  );
+    )
+    .on("error", function (err) {
+      gutil.log(gutil.colors.red("[Error]"), err.toString());
+    })
+    .pipe(gulp.dest(source.build_assets_path));
 });
 
-gulp.task("csstask", function() {
-  return (
-    gulp
-      .src([...source.ignore, ...source.scss_src])
-      .pipe(
-        changed(source.build_src, {
-          extension: ".css"
-        })
-      )
-      .pipe(sass().on("error", sass.logError)) //sass 编译
-      .pipe(gulp.dest(source.build_src))
-  );
+gulp.task("jstask:build", function () {
+  return gulp
+    .src([...source.js_path])
+    .pipe(
+      changed(source.build_assets_path, {
+        extension: ".js",
+      })
+    )
+    .pipe(
+      babel({
+        presets: ["es2015"],
+      })
+    )
+    .pipe(uglify())
+    .on("error", function (err) {
+      gutil.log(gutil.colors.red("[Error]"), err.toString());
+    })
+    .pipe(gulp.dest(source.build_assets_path));
 });
 
-gulp.task("csstask:build", function() {
-  return (
-    gulp
-      .src([...source.ignore, ...source.scss_src])
-      
-      .pipe(
-        changed(source.build_src, {
-          extension: ".css"
-        })
-      )
-      .pipe(sass().on("error", sass.logError)) //sass 编译
-      .pipe(cleanCss()) //css压缩
+gulp.task("csstask", function () {
+  return gulp
+    .src([...source.style_path])
+    .pipe(
+      changed(source.build_assets_path, {
+        extension: ".css",
+      })
+    )
+    .pipe(sass().on("error", sass.logError)) //sass 编译
+    .pipe(gulp.dest(source.build_assets_path));
+});
 
-      .pipe(gulp.dest(source.build_src))
-  );
+gulp.task("csstask:build", function () {
+  return gulp
+    .src([...source.style_path])
+
+    .pipe(
+      changed(source.build_assets_path, {
+        extension: ".css",
+      })
+    )
+    .pipe(sass().on("error", sass.logError)) //sass 编译
+    .pipe(cleanCss()) //css压缩
+
+    .pipe(gulp.dest(source.build_assets_path));
 });
 
 gulp.task("imagetask", () => {
-  return (
-    gulp
-      .src(source.img_src)
-      .pipe(changed(source.build_src))
-      .pipe(gulp.dest(source.build_src))
-  );
+  return gulp
+    .src(source.img_path)
+    .pipe(changed(source.build_assets_path))
+    .pipe(gulp.dest(source.build_assets_path));
 });
 gulp.task("imagetask:build", () => {
-  return (
-    gulp
-      .src(source.img_src)
-      .pipe(changed(source.build_src))
-      .pipe(
-        imagemin([
-          imagemin.gifsicle({
-            interlaced: true
-          }),
-          imagemin.jpegtran({
-            progressive: true
-          }),
-          imagemin.optipng({
-            optimizationLevel: 5
-          })
-        ])
-      )
-      .pipe(gulp.dest(source.build_src))
-  );
+  return gulp
+    .src(source.img_path)
+    .pipe(changed(source.build_assets_path))
+    .pipe(
+      imagemin([
+        imagemin.gifsicle({
+          interlaced: true,
+        }),
+        imagemin.jpegtran({
+          progressive: true,
+        }),
+        imagemin.optipng({
+          optimizationLevel: 5,
+        }),
+      ])
+    )
+    .pipe(gulp.dest(source.build_assets_path));
 });
-gulp.task('copyIgnore', function(){
-  return (
-    gulp
-    .src(source.ignorefile)
-    .pipe(gulp.dest(source.build_src))
-  );
-})
+gulp.task("copyIgnore", function () {
+  return gulp.src(source.ignorefile).pipe(gulp.dest(source.build_static_path));
+});
 
 //添加版本后缀
-gulp.task("revAppend", function() {
+gulp.task("revAppend", function () {
   gulp
-    .src([...source.html_src])
+    .src([...source.html_path])
     .pipe(revAppend())
-    .pipe(gulp.dest(source.build_src))
+    .pipe(gulp.dest(source.build_path))
     .pipe(connect.reload()); //热刷新
 });
 
-gulp.task("reload", function() {
+gulp.task("reload", function () {
   gulp
-    .src([...source.html_src])
-    .pipe(gulp.dest(source.build_src))
+    .src([...source.html_path])
+    .pipe(gulp.dest(source.build_path))
     .pipe(connect.reload()); //热刷新
 });
 
-gulp.task("server", function() {
+gulp.task("server", function () {
   connect.server({
     port: 8888,
-    root: source.build_src,
-    livereload: true //热刷新
+    root: source.build_path,
+    livereload: true, //热刷新
+    host:"::"
   });
 });
 
-
-gulp.task("watch", function() {
-  w([...source.ignore, ...source.scss_src], ["csstask", "revAppend"]);
-  w([...source.ignore, ...source.js_src], ["jstask", "revAppend"]);
-  w([...source.img_src], ["imagetask","reload"])
-  w([source.html_src], ["reload"]);
+gulp.task("watch", function () {
+  w([...source.style_path], ["csstask", "revAppend"]);
+  w([...source.js_path], ["jstask", "revAppend"]);
+  w([...source.img_path], ["imagetask", "reload"]);
+  w([source.html_path], ["reload"]);
   function w(path, taskname) {
     gulp.watch(path, taskname);
   }
 });
 
-gulp.task("default", function(cb) {
+gulp.task("default", function (cb) {
   gulpSequence(
     "clean:build",
     "imagetask",
@@ -196,7 +180,7 @@ gulp.task("default", function(cb) {
   )(cb);
 });
 
-gulp.task("build", function(cb) {
+gulp.task("build", function (cb) {
   gulpSequence(
     "clean:build",
     "imagetask:build",
@@ -209,7 +193,6 @@ gulp.task("build", function(cb) {
   )(cb);
 });
 
-
-gulp.task("sequenceTask", function(cb) {
+gulp.task("sequenceTask", function (cb) {
   gulpSequence("jstask", "csstask", "revAppend")(cb);
 });
