@@ -96,9 +96,11 @@ var TextBox = /** @class */ (function (_super) {
     return TextBox;
 }(Control));
 // 错误：“Image”类型缺少“state”属性。
-var Image = /** @class */ (function () {
-    function Image() {
+// class Images implements SelectableControl {
+//     select() { }
+// }
+var Locations = /** @class */ (function () {
+    function Locations() {
     }
-    Image.prototype.select = function () { };
-    return Image;
+    return Locations;
 }());
