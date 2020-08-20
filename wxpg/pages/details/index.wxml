@@ -1,7 +1,0 @@
-<!--pages/details/index.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
-<div class="contents">
-    <view  class="title">{{title}}</view>
-    <import src="../../wxParse/wxParse.wxml"/>
-    <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
-  </div>
