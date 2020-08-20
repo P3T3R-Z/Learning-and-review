@@ -1,0 +1,17 @@
+<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+  <i-button type="primary" bind:click="handleClick">这是一个按钮</i-button>
+  <button size="default" type="primary" open-type="getPhoneNumber" bindgetphonenumber="getuserinfo2">获取电话</button>
+  <button open-type="openSetting">授权页</button>
+</view>

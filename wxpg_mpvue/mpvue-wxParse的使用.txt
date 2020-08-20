@@ -1,0 +1,29 @@
+
+https://github.com/htzhanglong/mpvue-wxParse
+
+1.安装   mpvue-wxparse
+
+	npm i mpvue-wxparse  --save       /  cnpm i mpvue-wxparse  --save
+
+
+2.引入
+
+	import wxParse from 'mpvue-wxparse'
+
+
+3、注册组件
+
+	components: {
+   	 wxParse
+  	}
+
+4、使用组件解析html
+
+  <wxParse :content="article" @preview="preview" @navigate="navigate" />
+
+
+5、引入wxparse的css
+
+<style>
+	@import url("~mpvue-wxparse/src/wxParse.css");
+</style>

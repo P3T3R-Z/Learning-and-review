@@ -1,0 +1,54 @@
+/* 单条变量 */
+$nav-color:green;
+/*css嵌套*/
+#content {
+  article {
+    h1 { color: #333 }
+    p { margin-bottom: 1.4em }
+  }
+  #content aside { background-color: #EEE }
+}
+/* 属性嵌套 */
+a{
+	border:{
+		style:solid;
+		color:red;
+		width:1px
+	}
+}
+/*群组嵌套*/
+.container{
+	h1,h2,h3{
+		background: black
+	}
+}
+/*多条变量混合器*/
+@mixin rounded-corner{
+	border-radius:5px;
+	display:flex;
+}
+
+/* 混合器带参数 */
+@mixin active($hovercolor, $visitedcolor){
+	&:hover{color:$hovercolor;};
+	&:visited{color:$visitedcolor;};
+}
+
+
+/*//通过选择器继承继承样式*/
+.error {
+  border: 1px solid red;
+  background-color: #fdd;
+}
+.seriousError {
+  @extend .error;
+  border-width: 3px;
+}
+
+.page .item{
+	width: 50%
+}
+.choosed{
+	border:1px solid #efefef;
+	@extend .page
+}

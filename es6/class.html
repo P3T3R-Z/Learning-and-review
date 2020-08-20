@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>class类</title>
+</head>
+<body>
+    <script>
+        //es5构造函数
+
+        // function Person(name, age){
+        //     this.name=name;
+        //     this.age=age;
+            
+        // }
+        // Person.prototype.showName=function(){
+        //     return `名字:${this.name};今年:${this.age}`
+        // }
+
+        // var p=new Person('老王',19)
+        // console.log(p.showName())
+
+
+
+        //es6 class类
+        class G {
+            constructor(name, age){
+               
+                this.name=name;
+                this.age=age;
+                this.dish=[]
+            }
+            showname(){
+                return `名字:${this.name};今年:${this.age}`
+            }
+            set aaa(val){
+                this.dish.push(val)
+                console.log('你设置的dish属性->'+this.dish)
+                 
+            }
+            get aaa(){
+                
+                return '你获取的dish'+this.dish
+            }
+            static mc(){
+                console.log('静态方法mc')
+            }
+        }
+
+        var s=new G('老王',19)
+        console.log(s.showname())      //类的方法
+        s.aaa=123                    //set方法
+        console.log('构造函数y的方法', s.aaa)  //get方法
+
+        console.log(G.mc())                //静态方法
+        G.cc=20
+
+        class Child extends G{
+            constructor(...args){
+                super(...args)
+                console.log('子类继承属性',...args)     //子类继承属性
+          
+            }
+            shownames(){
+                return super.showname()
+            }
+            static mcs(){
+                super.mc()
+                console.log('子类继承静态属性',super.cc)
+            }
+        }
+        // ES5 的继承机制：是先创造子类的实例对象this，然后再将父类的方法添加到this上面（Parent.apply(this)）。
+        //ES6 的继承机制：是先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this。
+        var c=new Child('child','12')
+        console.log('子类继承方法',c.shownames())
+        console.log('子类继承静态',Child.mcs())
+
+
+        /*
+        静态方法，能被子类继承，不能被实例对象继承。
+        因为普通方法中，super指向的是父类原型对象。所以子类中，通过super只能访问到父类原型上的方法。
+        在静态方法中，super指向的是父类，只能访问父类的静态属性和静态方法。
+        普通方法中，this指向的是当前类的实例对象。
+        静态方法中，this指向的是当前类。
+        */
+
+        console.dir(G)
+        console.dir(Child)
+
+
+        // 子类的__proto__属性 ,指向父类。 Child.__proto__ === G
+        // 子类prototype属性的__proto__属性，指向父类的prototype属性。即Child.prototype.__proto__ === G.prototype
+        //子类实例的__proto__属性的__proto__属性，指向父类实例的__proto__属性。也就是说，子类的原型的原型，是父类的原型。即Child.__proto__.__proto__ === G.__proto__
+
+
+        //原生构造函数继承
+        class MyArray extends Array {
+            constructor(...args) {
+                super(...args);
+            }
+        }
+
+        var arr = new MyArray();
+        arr[0] = 12;
+        arr.length // 1
+
+        arr.length = 0;
+        arr[0] // undefined
+
+        // ES5 是先新建子类的实例对象this，再将父类的属性添加到子类上，由于父类的内部属性无法获取，导致无法继承原生的构造函数。
+
+        //ES6 允许继承原生构造函数定义子类，因为 ES6 是先新建父类的实例对象this，然后再用子类的构造函数修饰this，使得父类的所有行为都可以继承。
+    </script>
+</body>
+</html>

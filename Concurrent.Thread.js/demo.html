@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>js多线程</title>
+    <script src="./Concurrent.Thread.js"></script>
+  </head>
+  <body>
+    <button onclick="show()">123</button>
+    <script>
+      var show;
+      Concurrent.Thread.create(function() {
+        var i = 0;
+        show = function() {
+          alert(2);
+        };
+        while(1){
+            console.log(i++)
+        }
+      });
+    </script>
+  </body>
+</html>

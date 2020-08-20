@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>socket.io_DEMO</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        html,body {
+            background: #ccc;
+            padding: 20px 0 20px 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        .login {
+            text-align: center;
+        }
+        .chatinput {
+            display: block;
+            width: 80%;
+            position: absolute;
+            min-height: 30px;
+            bottom: 0;
+        }
+        #content {
+            height: auto;
+        }
+        #selectTochat {
+            position: absolute;
+            bottom:0;
+            width: 10%;
+            right:0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loginbox">
+    <h1>chat_DEMO</h1>
+    <hr>
+    <div class="login">
+        <lable>自定义昵称：</lable> <input value="" id="username" />
+                                    
+        <input type="button" value="登录" id="loginbutton">
+		<h5>version:1.0</h5>
+    </div>
+</div>
+<div style="display: none;" id="chatbox">
+    <div id="content"></div>
+    <input type="text" placeholder="回车发送群聊" class="chatinput" id="chatinput">
+    <!-- <select name="" id="selectTochat">
+        <option selected>小明</option>
+        <option>小张</option>
+        <option>小三</option>
+    </select> -->
+</div>
+<script type="text/javascript">
+    
+    $(function(){
+        const url = '127.0.0.1:3001';
+        
+        let socket = io.connect(url); 
+		
+        socket.on("disconnect", () => {
+            alert("与服务器断开连接");
+        });
+        socket.on('message',msg=>{
+            alert(msg)
+        })
+
+        let _username = null,
+            _$inputname = $('#username'), //登陆名
+            _$loginButton = $('#loginbutton');
+            _$chatinput = $('#chatinput');
+
+         //设置用户名，当用户登录的时候触发
+        let setUsername = function () {
+            
+            _username = _$inputname.val()
+            $('title').text(_username)
+            //判断用户名是否存在
+            if(_username) {
+                socket.emit('login',{"username": _username}); 
+				
+				
+            }
+        };
+
+        //启动聊天界面
+        let beginChat = function() {
+            $('#loginbox').hide('slow');
+           
+            _$loginButton.off('click');
+
+            $(`<p>欢迎你${_username}</p>`).insertBefore($("#content"));
+            $("#chatbox").show('slow');
+        }
+
+        //发送消息事件
+        let sendMessage = function () {
+
+            let _message = _$chatinput.val();
+            //let sendtoUsername = $('#selectTochat').find('option:selected').text()
+            //if(_username == sendtoUsername){
+            //    alert("无法与自己对话")
+            //    return
+            //}
+            if(_message) {
+                //socket.emit('sendMessage',{username: _username, message: _message, sendtoUsername: sendtoUsername});
+				socket.emit('sendMessage',{username: _username, message: _message});
+            }
+        };
+
+        //渲染接收的消息
+        let showMessage = function (data) {
+            
+            if(data.username === _username){
+                $("#content").append(`<p style='background: lightskyblue'><span>${data.username} : </span> ${data.message}</p>`);
+            }else {
+                $("#content").append(`<p style='background: lightpink'><span>${data.username} : </span> ${data.message}</p>`);
+            }
+        };
+
+         /*登录事件*/
+        _$loginButton.on('click',function (event) {    //监听按钮的点击事件，如果点击，就说明用户要登录，就执行setUsername函数
+            setUsername();
+
+        });
+        
+         _$inputname.on('keyup',function (event) {     //监听输入框的回车事件，这样用户回车也能登录。
+             if(event.keyCode === 13) {                //如果用户输入的是回车键，就执行setUsername函数
+                 setUsername();
+             }
+         })
+
+        //发送消息事件
+        _$chatinput.on('keyup',function (event) {
+            if(event.keyCode === 13) {
+                sendMessage();
+                _$chatinput.val('');
+            }
+        });
+
+
+        //客户端响应登录成功事件
+        socket.on('loginSuccess',(data)=>{
+            /**
+             * 如果服务器返回的用户名和刚刚发送的相同的话，就登录
+             * 否则说明有地方出问题了，拒绝登录
+             */
+            if(data.username === _username) {
+                beginChat(data);
+            }else {
+                alert("用户名不匹配，请重试");
+            }
+        })
+
+        //客户端接收消息
+        socket.on('receiveMessage',(data)=>{
+            /**
+             * 监听到事件发生，就显示信息
+             */
+            showMessage(data);
+        })
+
+        
+
+    })
+</script>
+</body>
+</html>

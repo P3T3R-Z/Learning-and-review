@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>css文字动效</title>
+</head>
+<style type="text/css">
+	.clip-bg{
+		background: linear-gradient(to left, green, red);
+		-webkit-background-clip: text;
+		color:transparent;
+		font-size:50px;
+		font-weight:bold;
+		display: inline;
+	}
+	
+	.box{
+		color:white;
+		background: green;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		position: relative;
+
+	}
+	.box:after {
+		content:"";
+		display: block;
+      position: absolute;
+      top: 0;
+      background: linear-gradient(to left, rgba(255, 255, 255, 0)0, rgba(255, 255, 255, .7)50%, rgba(255, 255, 255, 0)100%);
+      transform: skewX(-25deg);
+      animation: rolled 1s ease both infinite;
+      overflow: hidden;
+	  width: 1rem;
+	  height: 2rem;
+	  left:0;
+    }
+
+    @-webkit-keyframes rolled {
+
+      0% {
+        left: 0px;
+      }
+
+      100% {
+        left: 2rem;
+      }
+
+    }
+
+</style>
+<body>
+	<div class="clip-bg">
+		文字文字文字
+	</div>
+  
+  <div class="box">
+    文字文字文字
+  </div>
+</body>
+</html>

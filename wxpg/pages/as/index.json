@@ -1,0 +1,21 @@
+{
+  "component": true,
+  "usingComponents": {
+    "nav-bar": "/pages/navbar/index",
+    "i-button": "../../iView/button/index",
+    "i-notice-bar": "../../iView/notice-bar/index",
+    "i-count-down": "../../iView/count-down/index",
+    "i-input": "../../iView/input/index",
+    "i-tag": "../../iView/tag/index",
+    "i-grid": "../../iView/grid/index",
+    "i-toast": "../../iView/toast/index",
+    "i-action-sheet": "../../iView/action-sheet/index",
+    "i-message": "../../iView/message/index",
+    "i-drawer": "../../iView/drawer/index",
+    
+    "i-modal": "../../iView/modal/index",
+    "i-alert": "../../iView/alert/index",
+    "i-tabs": "../../iView/tabs/index",
+    "i-tab": "../../iView/tab/index"
+  }
+}
