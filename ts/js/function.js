@@ -43,9 +43,10 @@ function reverse(x) {
         return x.split('').reverse().join('');
     }
 }
-//类
+//--------------------------------类
 var Persons = /** @class */ (function () {
     function Persons(name) {
+        this.name = '';
         this.name = name;
     }
     Persons.prototype.run = function () {
@@ -53,11 +54,50 @@ var Persons = /** @class */ (function () {
     };
     return Persons;
 }());
-//继承
+//--------------------------------------继承
 var Web = /** @class */ (function (_super) {
     __extends(Web, _super);
     function Web(name) {
         return _super.call(this, name) || this;
     }
+    Web.prototype.work = function () {
+        _super.prototype.run.call(this);
+    };
     return Web;
 }(Persons));
+//--------------------------------------------多态
+var Animal = /** @class */ (function () {
+    function Animal(name) {
+        this.name = name;
+    }
+    return Animal;
+}());
+var Dogs = /** @class */ (function (_super) {
+    __extends(Dogs, _super);
+    function Dogs(name) {
+        return _super.call(this, name) || this;
+    }
+    Dogs.prototype.eat = function () {
+        return this.name + '吃狗粮';
+    };
+    return Dogs;
+}(Animal));
+//---------------------------------------------------------抽象类
+//abstract关键词, 不能直接被实例化; 抽象方法必须在抽象类中
+//抽象类的子类 `必须` 实现抽象类的抽象方法
+var Animal2 = /** @class */ (function () {
+    function Animal2(name) {
+        this.name = name;
+    }
+    return Animal2;
+}());
+var Dogs2 = /** @class */ (function (_super) {
+    __extends(Dogs2, _super);
+    function Dogs2(name) {
+        return _super.call(this, name) || this;
+    }
+    Dogs2.prototype.eat = function () {
+        console.log(this.name + '吃屎');
+    };
+    return Dogs2;
+}(Animal2));
