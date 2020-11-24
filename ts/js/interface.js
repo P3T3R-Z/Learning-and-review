@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -11,6 +12,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var tom = {
     name: "wang",
     gender: "male",
@@ -98,3 +100,5 @@ var per5 = /** @class */ (function (_super) {
 var lw = new per5('alice');
 lw.eat(); //alice喜欢吃饭
 lw.work(lw.coding('ts')); //alice喜欢敲ts
+//申明的全局命名空间
+www.s = 123;

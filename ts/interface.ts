@@ -1,3 +1,5 @@
+import { A } from "./namespace";
+
 interface Person {
   name: string;
   age?: number; //可选属性
@@ -141,3 +143,6 @@ let lw = new per5('alice')
 
 lw.eat() //alice喜欢吃饭
 lw.work(lw.coding('ts')) //alice喜欢敲ts
+
+//申明的全局命名空间
+ www.s=123

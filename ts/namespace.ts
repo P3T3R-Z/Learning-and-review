@@ -16,7 +16,7 @@ export namespace A {
             console.log(this.name + '吃饭')
         }
     }
- 
+    var s=1
 }
 
  

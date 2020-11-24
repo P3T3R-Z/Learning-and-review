@@ -16,6 +16,7 @@ var A;
         return dog3;
     }());
     A.dog3 = dog3;
+    var s = 1;
 })(A = exports.A || (exports.A = {}));
 var dog = new A.dog3('小黑');
 dog.eat();
