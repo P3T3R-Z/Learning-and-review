@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  <body>
+    <div id="app" v-cloak>
+      <div v-for="i in girls">{{i}}</div>
+
+      <button
+        v-for="(item, index) in data.girls"
+        v-bind:key="index"
+        @click="data.selectGirlFun(index)"
+      >
+        {{ index }} : {{ item }}
+      </button>
+      <div>你选择了【{{ data.selectGirl }}】为你服务</div>
+    </div>
+  </body>
+  <script src="https://unpkg.com/vue@next"></script>
+
+  <script>
+    let { ref, reactive } = Vue;
+    //实例对象
+    let app = Vue.createApp({
+      setup() {
+        const girls = ref(["大脚", "刘英", "晓红"]);
+
+        const data = reactive({
+          girls: ["大脚", "刘英", "晓红"],
+          selectGirl: "",
+          selectGirlFun: (index) => {
+            data.selectGirl = data.girls[index];
+          },
+        });
+
+        return {
+          girls,
+          data,
+        };
+      },
+    });
+    let vm = app.mount("#app"); //根节点
+    console.log(Vue, app, vm);
+  </script>
+</html>
