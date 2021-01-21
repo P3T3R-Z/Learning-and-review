@@ -1,3 +1,29 @@
+/**
+ * --------------Unknown
+ * 就像所有类型都可以赋值给 any，所有类型也都可以赋值给 unknown。
+ * 这使得 unknown 成为 TypeScript 类型系统的另一种顶级类型（另一种是 any）。下面我们来看一下 unknown 类型的使用
+ * **/
+let value: unknown;
+
+let value1: unknown = value; // OK
+let value2: any = value; // OK
+
+let value3: boolean = value; // Error
+let value4: number = value; // Error
+let value5: string = value; // Error
+let value6: object = value; // Error
+let value7: any[] = value; // Error
+let value8: Function = value; // Error
+
+/**
+ * -----------------tuple类型
+ * 元组
+ * **/
+let tupleType: [string, boolean];
+tupleType = ["semlinker", true];
+tupleType = [true, '1']
+
+
 /**---------------断言
  *
  * **/
@@ -12,16 +38,14 @@ let someValue2: any = "this is a string";
 let strLength2: number = (someValue as string).length;
 
 //非空断言
-//在上下文中当类型检查器无法断定类型时，一个新的后缀表达式操作符 ! 可以用于断言操作对象是非 null 和非 undefined 类型。具体而言，x! 将从 x 值域中排除 null 和 undefined 。
+//在上下文中当类型检查器无法断定类型时，一个新的后缀表达式操作符 ! 可以用于断言操作对象是非 null 和非 undefined 类型。
+//具体而言，x! 将从 x 值域中排除 null 和 undefined 。
+//strictNullChecks必须开启
 //忽略 undefined 和 null 类型
-function myFunc(maybeString: string | undefined | null) {
-  // Type 'string | null | undefined' is not assignable to type 'string'.
-  // Type 'undefined' is not assignable to type 'string'.
-  const onlyString: string = maybeString; // Error
-  const ignoreUndefinedAndNull: string = maybeString!; // Ok
+function sayHello1(name: string | undefined) {
+  let sname: string = name; //此时必须加上!符号, name!
 }
 //.调用函数时忽略 undefined 类型
-
 type NumGenerator = () => number;
 
 function myFunc2(numGenerator: NumGenerator | undefined) {
@@ -342,7 +366,7 @@ loggingIdentity(3); // Error, number doesn't have a .length property
 
 loggingIdentity({ length: 10, value: 3 });
 
-//Partial
+//-----Partial<T>
 //作用就是将某个类型里的属性全部变为可选项 ?。
 /**
  * node_modules/typescript/lib/lib.es5.d.ts
@@ -352,7 +376,7 @@ loggingIdentity({ length: 10, value: 3 });
 在以上代码中，首先通过 keyof T 拿到 T 的所有属性名，然后使用 in 进行遍历，将值赋给 P，最后通过 T[P] 取得相应的属性值。中间的 ? 号，用于将所有属性变为可选。
 
  * **/
-
+//Partial 1
 interface Todo {
   title: string;
   description: string;
@@ -370,6 +394,25 @@ const todo1 = {
 const todo2 = updateTodo(todo1, {
   description: "Learn TypeScript Enum",
 });
+
+
+//Partial 2
+interface PullDownRefreshConfig {
+  threshold: number;
+  stop: number;
+}
+
+type PullDownRefreshOptions = Partial<PullDownRefreshConfig> //所有属性可选
+
+//--------Required<T>
+//把所有的可选的属性变成必选
+type PullDownRefresh = Required<Partial<PullDownRefreshConfig>>  //所有属性必选
+
+
+
+
+
+
 
 //--------------------------------------------------------------------------------------------decorators装饰器
 //需要注意的是，若要启用实验性的装饰器特性，你必须在命令行或 tsconfig.json 里启用 experimentalDecorators 编译器选项：
@@ -418,7 +461,7 @@ myGreeting2.greet(); // console output: 'Hello TS!';
 
 //------------------------------------------------------属性装饰器
 //target: Object - 被装饰的类
-// propertyKey: string | symbol - 被装饰类的属性名
+// key: string | symbol - 被装饰类的属性名
 function logProperty3(target: any, key: string) {
   delete target[key];
 
@@ -463,3 +506,128 @@ class Personp {
 
 const p4 = new Personp("semlinker");
 p4.name = "kakuqo";
+
+
+//----------?. 运算符  可选链
+const a6:any = undefined
+const vals = a6?.b;
+//编译后的es5
+var val6 = a6 === null || a6 === void 0 ? void 0 : a6.b;
+
+//可选元素访问
+//可选链除了支持可选属性的访问之外，它还支持可选元素的访问，它的行为类似于可选属性的访问，只是可选元素的访问允许我们访问非标识符的属性，比如任意字符串、数字索引和 Symbol：
+function tryGetArrayElement<T>(arr?: T[], index: number = 0) {
+  return arr?.[index];
+}
+//可选链与函数调用
+let result = a6.customMethod?.();
+//编译后的es5
+var results = (_a = a6.customMethod) === null
+  || _a === void 0 ? void 0 : _a.call(a6);
+
+
+  //------------------?? 空值合并运算符
+  //当左侧操作数为 null 或 undefined 时，其返回右侧的操作数，否则返回左侧的操作数。
+  const foo = null ?? 'default string';
+console.log(foo); // 输出："default string"
+
+const baz = 0 ?? 42;
+console.log(baz); // 输出：0
+
+
+//短路 当空值合并运算符的左表达式不为 null 或 undefined 时，不会对右表达式进行求值。
+function A() { console.log('A was called'); return undefined;}
+function B() { console.log('B was called'); return false;}
+function C() { console.log('C was called'); return "foo";}
+
+console.log(A() ?? C());
+console.log(B() ?? C());
+/**
+ *A was called 
+  C was called 
+  foo 
+  B was called 
+  false
+**/
+
+
+
+
+
+//-------------构造签名
+//使用 new 关键字来描述一个构造函数：
+interface Funcs {
+  new (x: number, y: number): Funcs
+}
+
+//-------------构造函数类型
+//包含一个或多个构造签名的对象类型被称为构造函数类型；
+//构造函数类型可以使用构造函数类型字面量或包含构造签名的对象类型字面量来编写。
+//那么什么是构造函数类型字面量呢？构造函数类型字面量是包含单个构造函数签名的对象类型的简写。具体来说，构造函数类型字面量的形式如下：
+//new < T1, T2, ... > ( p1, p2, ... ) => R
+//该形式与以下对象字面量类型是等价的：
+//{ new < T1, T2, ... > ( p1, p2, ... ) : R }
+
+/*
+interface Point {
+  new (x: number, y: number): Point;
+  x: number;
+  y: number;
+}
+
+class Point2D implements Point {
+  readonly x: number;
+  readonly y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+const point: Point = new Point2D(1, 2);
+
+对于以上的代码，TypeScript 编译器会提示以下错误信息：
+Class 'Point2D' incorrectly implements interface 'Point'.
+Type 'Point2D' provides no match for the signature 'new (x: number, y: number): Point'.
+
+要解决这个问题，我们就需要把对前面定义的 Point 接口进行分离，即把接口的属性和构造函数类型进行分离：
+
+
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface PointConstructor {
+  new (x: number, y: number): Point;
+}
+
+完成接口拆分之后，除了前面已经定义的 Point2D 类之外，我们又定义了一个 newPoint 工厂函数，
+该函数用于根据传入的 PointConstructor 类型的构造函数，来创建对应的 Point 对象。
+
+
+
+class Point2D implements Point {
+  readonly x: number;
+  readonly y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+function newPoint(
+  pointConstructor: PointConstructor,
+  x: number,
+  y: number
+): Point {
+  return new pointConstructor(x, y);
+}
+
+const point: Point = newPoint(Point2D, 2, 2);
+
+*/
+
