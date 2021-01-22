@@ -1,3 +1,5 @@
+# keyof与typeof操作符
+
 一、keyof 简介
 TypeScript 允许我们遍历某种类型的属性，并通过 keyof 操作符提取其属性的名称。keyof 操作符是在 TypeScript 2.1 版本引入的，该操作符可以用于获取某种类型的所有键，其返回类型是联合类型。
 下面我们来看个例子：

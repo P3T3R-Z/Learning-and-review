@@ -1,3 +1,6 @@
+# Object,object,{}类型之间的区别
+
+
 一、使用 object 类型进行类型声明
 随着 TypeScript 2.2 的发布，标准库的类型声明已经更新，以使用新的对象类型。例如，Object.create() 和Object.setPrototypeOf() 方法，现在需要为它们的原型参数指定 object | null 类型：
 
@@ -238,7 +241,7 @@ const namedPoint = {...pt, ...id}
 namedPoint.name // Ok
 ```
 
-三、对象字面量类型 vs 接口类型
+三、类型别名(对象字面量类型) vs 接口类型
 我们除了可以通过 Object 和 object 类型来描述对象之外，也可以通过对象的属性来描述对象
 ```ts
 // Object literal type
