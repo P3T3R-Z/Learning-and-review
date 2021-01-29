@@ -32,7 +32,7 @@ class Compiler {
 
             let [,directive] = name.split('-');
             //处理不同的指令 v-model v-html v-bind等
-            compileUtil[directive](node, expr, this.vm)
+            CompileUtil[directive](node, expr, this.vm)
         
            }
         })
@@ -46,7 +46,7 @@ class Compiler {
 
         //匹配花括号文本节点
         if(reg.test(content)){
-            compileUtil['text'](node, content, this.vm)
+            CompileUtil['text'](node, content, this.vm)
         }
     }
     //编译文档碎片
@@ -89,7 +89,7 @@ class Compiler {
         return node.nodeType === 1;
     }
 }
-let compileUtil = {
+let CompileUtil = {
     //获取$data的数据
     getVal(vm, expr){ //表达式 例: school.name
        return expr.split('.').reduce((data, current)=>{
