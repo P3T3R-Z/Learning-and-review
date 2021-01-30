@@ -4,12 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mvvm</title>
+
   </head>
   <body>
     <div id="app">
       <input type="text" v-model="school.name" />
       <div>{{school.name}}</div>
       <div>{{school.age}}</div>
+      <div>{{strs}}</div>
+
+      <button v-on:click="change">methods</button>
+
+      <div v-html="strhtml"></div>
+      <div>{{p}}</div>
     </div>
 
     <script src="./mvvm.js"></script>
@@ -21,7 +28,20 @@
             name: "北京大学",
             age: 99,
           },
+
+          strhtml: `<h1>hello world<h1>`,
+          p: 'd'
         },
+        computed:{
+          strs(){
+            return this.school.name + 'xxx'
+          }
+        },
+        methods:{
+          change(){
+            this.school.name = 'AAA'
+          }
+        }
       });
     </script>
   </body>
