@@ -1,0 +1,174 @@
+webpack多页打包
+
+#### 原因:
+很多场景下，单页应用的开发模式并不适用。比如公司经常开发一些活动页:
+
+https://www.demo.com/activity/activity1.html https://www.demo.com/activity/activity2.html https://www.demo.com/activity/activity3.html
+
+上述三个页面是完全不相干的活动页，页面之间并没有共享的数据。然而每个页面都使用了React框架，并且三个页面都使用了通用的弹框组件。在这种场景下，就需要使用webpack多页面打包的方案了：
+
+1. 保留了传统单页应用的开发模式：使用Vue，React等前端框架(当然也可以使用jQuery)，支持模块化打包，你可以把每个页面看成是一个单独的单页应用
+2. 独立部署：每个页面相互独立，可以单独部署，解耦项目的复杂性，你甚至可以在不同的页面选择不同的技术栈
+
+#### 原理
+首先我们约定： src/pages目录下，每个文件夹为单独的一个页面。每个页面至少有两个文件配置:
+
+app.js: 页面的逻辑入口
+index.html: 页面的html打包模板
+src/pages
+├── page1
+│   ├── app.js
+│   ├── index.html
+│   ├── index.scss
+└── page2
+    ├── app.js
+    ├── index.html
+    └── index.scss
+前面我们说过：每个页面可以看成是个独立的单页应用。
+
+单页应用怎么打包的？单页应用是通过配置webpack的的entry
+```js
+module.exports = {
+  entry: './src/main.js', // 项目的入口文件，webpack会从main.js开始，把所有依赖的js都加载打包
+  output: {
+      path: path.resolve(__dirname, './dist'), // 项目的打包文件路径
+      filename: 'build.js' // 打包后的文件名
+  }
+};
+```
+
+因此，多页应用只需配置多个entry即可
+```js
+module.exports = {
+  entry: {
+    'page1': './src/pages/page1/app.js', // 页面1
+    'page2': './src/pages/page2/app.js', // 页面2
+  },
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: 'js/[name]/[name]-bundle.js', // filename不能写死，只能通过[name]获取bundle的名字
+  }
+}
+```
+
+
+同时，因为多页面的index.html模板各不相同，所以需要配置多个HtmlWebpackPlugin。
+
+注意：HtmlWebpackPlugin一定要配chunks，否则所有页面的js都会被注入到当前html里
+
+```js
+module.exports = {
+  plugins: [
+    new HtmlWebpackPlugin(
+    {
+      template: './src/pages/page1/index.html',
+      chunks: ['page1'],
+    }
+  ),
+  new HtmlWebpackPlugin(
+    {
+      template: './src/pages/page2/index.html',
+      chunks: ['page2'],
+    }
+  ),
+  ]
+}
+```
+
+##### 多页面打包的原理就是：配置多个entry和多个HtmlWebpackPlugin
+
+#### 细节
+##### 代码分割
+
+1. 把多个页面共用的第三方库(比如React,Fastclick)单独打包出一个vendor.js
+2. 把多个页面共用的逻辑代码和共用的全局css(比如css-reset,icon字体图标)单独打包出common.js和common.css
+3. 把运行时代码单独提取出来manifest.js
+4. 把每个页面自己的业务代码打包出page1.js和page1.css
+前3项是每个页面都会引入的公共文件，第4项才是每个页面自己单独的文件。
+
+实现方式也很简单，配置optimization即可：
+```js
+module.exports = {
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        // 打包业务中公共代码
+        common: {
+          name: "common",
+          chunks: "initial",
+          minSize: 1,
+          priority: 0,
+          minChunks: 2, // 同时引用了2次才打包
+        },
+        // 打包第三方库的文件
+        vendor: {
+          name: "vendor",
+          test: /[\\/]node_modules[\\/]/,
+          chunks: "initial",
+          priority: 10,
+          minChunks: 2, // 同时引用了2次才打包
+        }
+      }
+    },
+    runtimeChunk: { name: 'manifest' } // 运行时代码
+  }
+}
+```
+
+##### hash
+最后打包出来的文件，我们希望带上hash值，这样可以充分利用浏览器缓存。
+webpack中有hash，chuckhash，contenthash：生产环境时，我们一般使用contenthash，而开发环境其实可以不指定hash。
+```js
+// dev开发环境
+module.exports = {
+  output: {
+    filename: 'js/[name]/[name]-bundle.js',
+    chunkFilename: 'js/[name]/[name]-bundle.js',
+  },
+}
+
+// prod生产环境
+module.exports = {
+  output: {
+    filename: 'js/[name]/[name]-bundle.[contenthash:8].js',
+    chunkFilename: 'js/[name]/[name]-bundle.[contenthash:8].js',
+  },
+}
+```
+
+##### mock和proxy
+开发环境，通常需要mock数据，还需要代理api到服务器。我们可以通过devServer配合mocker-api第三方库实现。
+```js
+const apiMocker = require('mocker-api');
+
+// dev开发环境
+module.exports = {
+  devServer: {
+    before(app) { // 本地mock数据
+      apiMocker(app, path.resolve(__dirname, '../mock/index.js'))
+    },
+    proxy: { // 代理接口
+      '/api': {
+        target: 'https://anata.me', // 后端联调地址
+        changeOrigin: true,
+        secure: false,
+      },
+    }
+  },
+}
+```
+
+##### 拆分webpack配置
+
+为了通用配置，把webpack的配置文件分成3份。
+build
+├── webpack.base.js // 共用部分
+├── webpack.dev.js // dev
+└── webpack.prod.js // 生产
+
+dev和prod配置的主要区别：
+
+dev配置devServer，方便本地调试开发
+
+prod打包压缩文件，单独提取css (dev不提取是为了css热更新)，生成静态资源清单manifest.json
+
