@@ -3,8 +3,7 @@ var fs = require("fs"),
 var { registerFont, createCanvas } = require("canvas");
 
 var watermark = require("./watermark");
-var cookText = require("./cookText")
-
+var cookText = require("./cookText");
 
 var config = require("./config.js");
 let { srcDir, buildDir: build, imgType } = config;
@@ -44,44 +43,38 @@ async function getFile(filepath) {
   }
 }
 
-async function cook(dirname) {
-  let files = fs.readdirSync(dirname);
 
+async function cook(dirname) {
+ 
+  let files = fs.readdirSync(dirname);
+ 
   for (let index = 0; index < files.length; index++) {
     let file = files[index];
     let stats = fs.statSync(path.join(dirname, file));
 
     if (stats.isDirectory()) {
       await cook(path.join(dirname, file));
+      
     } else if (stats.isFile()) {
       let cookdata = await getFile(path.join(dirname, file));
-
-      savePosters(cookdata, dirname);
+      
+      posters.push({name: dirname, ...cookdata})
     }
   }
 }
 
-function savePosters(cookdata, dirname) {
-  var hasdata = posters.find((i) => i.path == dirname);
-  if (!hasdata) {
-    hasdata = {
-      path: dirname,
-      ...cookdata,
-    };
-    posters.push(hasdata);
-  } else {
-    let key = Object.keys(cookdata)[0];
-    let val = Object.values(cookdata)[0];
-    if (key == "str") {
-      hasdata[key] = val;
-    } else if (key == "img") {
-      if (hasdata[key] && hasdata[key].length) {
-        hasdata[key].push(val);
-      } else {
-        hasdata[key] = [val];
-      }
+//以回车符拆分文本为数组
+function formatStr(str) {
+  if (!str) return [];
+  let arr = [],
+    matchstr = "",
+    pageExp = /.+[\r\n]*?/g;
+  while ((matchstr = pageExp.exec(str))) {
+    if (matchstr && matchstr[0]) {
+      arr.push(matchstr[0]);
     }
   }
+  return arr;
 }
 
 function drawPoster() {
@@ -90,16 +83,44 @@ function drawPoster() {
   const canvas = createCanvas(750, 1334);
   const ctx = canvas.getContext("2d");
 
-  cookText(ctx, "123")
+  cookText(ctx, "123");
 
-  var dataUrl = canvas.toDataURL('image/png', (png)=>{
-    console.log(png)
-  })
-
+  var dataUrl = canvas.toDataURL("image/png", (png) => {
+    console.log(png);
+  });
 }
 
-var posters = [];
+var posters = []
+cook(srcDir).then(res=>{
 
-cook(srcDir).then(() => {
-  drawPoster();
-});
+   
+/*posters格式化下面数据解构
+  data = [
+    {
+      name: "src\\xxx\xxx",
+      str: [xx,xx],
+      img: [xx,xx]
+    }
+  ]
+*/
+
+  let data = posters.reduce((prev, item)=>{
+    let hasdata = prev.find(i=>i.name==item.name)
+    if(hasdata){
+      if(item.hasOwnProperty('img')){
+        hasdata.img.push(item.img)
+      }
+      else if(item.hasOwnProperty('str')){
+        hasdata.str.concat(formatStr(item.str))
+      }
+    } else {
+      prev.push({
+        name: item.name,
+        str: formatStr(item.str),
+        img: item.img?[item.img]:[]
+      })
+    }
+    return prev
+  },[])
+  console.log(data)
+})
