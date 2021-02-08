@@ -1,7 +1,7 @@
 const Jimp = require("jimp");
 
 // 水印距离右下角百分比
-const LOGO_MARGIN_PERCENTAGE = 5 / 100;
+// const LOGO_MARGIN_PERCENTAGE = 5 / 100;
 
 const build = async (ORIGINAL_IMAGE, LOGO) => {
   const [image, logo] = await Promise.all([
@@ -10,13 +10,13 @@ const build = async (ORIGINAL_IMAGE, LOGO) => {
   ]);
 
   // 将 logo 等比缩小 10 倍
-  logo.resize(image.bitmap.width / 10, Jimp.AUTO);
+  // logo.resize(image.bitmap.width / 8, Jimp.AUTO);
+  logo.resize(logo.bitmap.width * 2, Jimp.AUTO);
+  // const xMargin = image.bitmap.width * LOGO_MARGIN_PERCENTAGE;
+  // const yMargin = image.bitmap.width * LOGO_MARGIN_PERCENTAGE;
 
-  const xMargin = image.bitmap.width * LOGO_MARGIN_PERCENTAGE;
-  const yMargin = image.bitmap.width * LOGO_MARGIN_PERCENTAGE;
-
-  const X = image.bitmap.width - logo.bitmap.width - xMargin;
-  const Y = image.bitmap.height - logo.bitmap.height - yMargin;
+  const X = logo.bitmap.width * 1.2//image.bitmap.width - logo.bitmap.width - xMargin;
+  const Y = image.bitmap.height - logo.bitmap.height*4.2//logo.bitmap.height - yMargin;
 
   return image.composite(logo, X, Y, [
     {
