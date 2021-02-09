@@ -1,5 +1,5 @@
 const Jimp = require("jimp");
-
+const { srcDir, buildDir, watermark } = require("./config.js");
 // 水印距离右下角百分比
 // const LOGO_MARGIN_PERCENTAGE = 5 / 100;
 
@@ -15,8 +15,8 @@ const build = async (ORIGINAL_IMAGE, LOGO) => {
   // const xMargin = image.bitmap.width * LOGO_MARGIN_PERCENTAGE;
   // const yMargin = image.bitmap.width * LOGO_MARGIN_PERCENTAGE;
 
-  const X = logo.bitmap.width * 1.2//image.bitmap.width - logo.bitmap.width - xMargin;
-  const Y = image.bitmap.height - logo.bitmap.height*4.2//logo.bitmap.height - yMargin;
+  const X = logo.bitmap.width * 1.2; //image.bitmap.width - logo.bitmap.width - xMargin;
+  const Y = image.bitmap.height - logo.bitmap.height * 4.2; //logo.bitmap.height - yMargin;
 
   return image.composite(logo, X, Y, [
     {
@@ -29,12 +29,11 @@ const build = async (ORIGINAL_IMAGE, LOGO) => {
 
 /**
  * @param ORIGINAL_IMAGE {string} 处理图片
- * @param config           {object} 配置
  * **/
-module.exports = function (ORIGINAL_IMAGE, config) {
+module.exports = function (ORIGINAL_IMAGE) {
   return new Promise((resolve) => {
-    build(ORIGINAL_IMAGE, config.watermark).then((image) => {
-      const FILENAME = ORIGINAL_IMAGE.replace(config.srcDir, config.buildDir);
+    build(ORIGINAL_IMAGE, watermark).then((image) => {
+      const FILENAME = ORIGINAL_IMAGE.replace(srcDir, buildDir);
       return image.write(FILENAME, (err) => {
         if (err) {
           return console.error(err);

@@ -1,7 +1,6 @@
 // https://wow.techbrood.com/fiddle/38877
-var config = require("./config.js");
 
-let { lineheight, lineTextLength, fontSize, fontFamily, fontColor } = config;
+let { lineheight, lineTextLength, fontSize, fontFamily, fontColor } = require("./config.js");
 
 function getTrueLength(str) {
   //获取字符串的真实长度（字节长度）
@@ -42,8 +41,8 @@ function cutString(str, leng) {
   return tlen;
 }
 
-module.exports = function (ctx, text) {
-  //   ctx.clearRect(0, 0, ctx.width, ctx.height);
+module.exports = function cookText(ctx, text) {
+ 
   ctx.font = `${fontSize} ${fontFamily}`;
   ctx.fillStyle = fontColor;
 
