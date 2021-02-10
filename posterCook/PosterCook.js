@@ -7,7 +7,7 @@ let watermark = require("./watermark");
 let drawPoster = require("./draw.js")
 
 
-let { srcDir, imgType, textEncoding, textSplitSign } = require("./config.js");
+let { srcDir, imgType, textEncoding, textSplitSign } = require("./config.js").mainConfig;
 
 let { readstream } = require("./util.js");
 

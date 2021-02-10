@@ -1,5 +1,5 @@
 const Jimp = require("jimp");
-const { srcDir, buildDir, watermark } = require("./config.js");
+const { srcDir, buildDir, watermark } = require("./config.js").mainConfig;
 // 水印距离右下角百分比
 // const LOGO_MARGIN_PERCENTAGE = 5 / 100;
 
@@ -38,7 +38,7 @@ module.exports = function (ORIGINAL_IMAGE) {
         if (err) {
           return console.error(err);
         }
-        resolve(FILENAME);
+        resolve(image.getBase64Async("image/png"));
       });
     });
   });
