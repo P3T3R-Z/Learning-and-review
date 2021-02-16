@@ -7,20 +7,19 @@ let mainConfig = {
   textSplitSign: /.+[\r\n]*?/g,
   textEncoding: "utf-8",
 
-  width: 320, //海报宽度
-  height: 568, //初始高度, 后面会计算实际高度
+  width: 957, //海报宽度
+  height: 1000, //初始高度, 后面会计算实际高度
   fill: "white", //海报颜色
 };
 
 exports.mainConfig = mainConfig;
 
 let textConfig = {
-  lineHeight: 1.2, //文字行高
+  lineHeight: 3, //文字行高
   fontSize: 16, //文字大小
   fontFamily: "sans-serif", //字体
-  fill: "#999", //文字颜色
+  fill: "#686868", //文字颜色
   width: mainConfig.width,
-  height: "auto",
 };
 
 exports.textConfig = textConfig;
