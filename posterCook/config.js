@@ -10,23 +10,26 @@ let mainConfig = {
   width: 957, //海报宽度
   height: 1000, //初始高度, 后面会计算实际高度
   fill: "white", //海报颜色
+
+  imgMargin: 60,
 };
 
 exports.mainConfig = mainConfig;
 
 let textConfig = {
-  lineHeight: 3, //文字行高
-  fontSize: 16, //文字大小
+  lineHeight: 2, //文字行高
+  fontSize: 30, //文字大小
   fontFamily: "sans-serif", //字体
   fill: "#686868", //文字颜色
-  width: mainConfig.width,
+  width: 794, //文本宽度
+  x: 80, //距左边
 };
 
 exports.textConfig = textConfig;
 
 let imgConfig = {
-  width: mainConfig.width,
-  x: 0
+  width: 730, //图片宽度
+  x: 113, //距左边
 };
 
 exports.imgConfig = imgConfig;
