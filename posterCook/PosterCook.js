@@ -1,33 +1,36 @@
 let fs = require("fs"),
   path = require("path");
-  let { createCanvas, loadImage } = require("canvas");
+let { createCanvas, loadImage } = require("canvas");
 
 let watermark = require("./watermark");
- 
-let drawPoster = require("./draw.js")
 
+let drawPoster = require("./draw.js");
 
-let { srcDir, imgType, textEncoding, textSplitSign } = require("./config.js").mainConfig;
+let {
+  srcDir,
+  imgType,
+  textEncoding,
+  textSplitSign,
+} = require("./config.js").mainConfig;
 
 let { readstream } = require("./util.js");
 
-
-
-
 module.exports = class PosterCook {
-  constructor() {
-  }
+  constructor() {}
 
-  async cook() {
-
-    let posters = []
+  async cook(query) {
+    let posters = [];
 
     await this.initProcess(srcDir, posters);
-    console.log('--initProcess finish--')
-    posters = this.formatdata(posters);
-    // console.log('initdata', initdata)
-
-    return drawPoster(posters)
+    let res = "--initProcess finish--"
+    console.log(res);
+    
+    if (Object.keys(query).length > 0) {
+      posters = this.formatdata(posters);
+      return drawPoster(posters);
+    } else {
+      return Promise.resolve(res)
+    }
   }
 
   //步骤1: 获取读取的文字和水印图片
@@ -104,10 +107,4 @@ module.exports = class PosterCook {
       return prev;
     }, []);
   }
-
-
-
-  drawPoster(){
-
-  }
-}
+};

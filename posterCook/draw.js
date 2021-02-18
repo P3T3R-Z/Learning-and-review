@@ -22,7 +22,6 @@ async function konva_draw(data) {
 
   var stage = new Konva.Stage({
     width: mainConfig.width,
-    height: mainConfig.height,
   });
 
   var layer = new Konva.Layer();
@@ -30,11 +29,10 @@ async function konva_draw(data) {
   var rect = new Konva.Rect({
     fill: "#fff",
     width: mainConfig.width,
-    height: mainConfig.height,
     shadowColor: "black",
     shadowBlur: 10,
-    shadowOffsetX: 5,
-    shadowOffsetY: 5,
+    shadowOffsetX: 10,
+    shadowOffsetY: 10,
     shadowOpacity: 0.2,
     cornerRadius: 60,
   });
@@ -42,12 +40,13 @@ async function konva_draw(data) {
 
   let headimgHeight = await drawImage(
     layer,
-    "./head.png",
+    mainConfig.headImg,
     0,
     ctxHeight,
     mainConfig.width
   );
   ctxHeight += headimgHeight;
+
   const margin = mainConfig.imgMargin;
 
   for (let index = 0; index < textstrs.length; index++) {
@@ -70,7 +69,7 @@ async function konva_draw(data) {
 
   let footimgHeight = await drawImage(
     layer,
-    "./foot.png",
+    mainConfig.footImg,
     0,
     ctxHeight + margin,
     mainConfig.width
@@ -98,8 +97,7 @@ function drawText(layer, textstr, y = 0) {
     text: textstr,
     ...textConfig,
     y,
-  });
-
+  }); 
   layer.add(text);
   return text.height();
 }
@@ -142,70 +140,30 @@ function loadImages(sources, width) {
 
 async function drawCtxImg(layer, imgdata, x = 0, y = 0, width) {
   let { img, imgHeight } = await loadImages(imgdata, width);
-
-  var line = new Konva.Line({
-    points: [
-      x + 20,
-      y - 20,
-
-      // x + width / 4,
-      // y - 20,
-
-      x + width / 2,
-      y - 20,
-
-      // x + width / 2 + width / 4,
-      // y - 20,
-
-      x + width - 20,
-      y - 20,
-
-      x + width + 20,
-      y + 20,
-
-      x + width + 20,
-      y + imgHeight / 2,
-
-      x + width + 20,
-      y + imgHeight - 20,
-
-      x + width - 20,
-      y + imgHeight + 20,
-
-      x + width / 2,
-      y + imgHeight + 20,
-
-      x + 20,
-      y + imgHeight + 20,
-
-      x - 20,
-      y + imgHeight - 20,
-
-      x - 20,
-      y + imgHeight / 2,
-
-      x - 20,
-      y + 20,
-    ],
-    closed: true,
-    stroke: "#a6d28d",
-    strokeWidth: 2,
-    lineCap: "round",
-    lineJoin: "round",
-    dash: [2, 4],
-    tension: 0.4,
-  });
-  layer.add(line);
-
-  var rect = new Konva.Rect({
+  let { cornerRadius, scale } = imgConfig;
+  var rectborder = new Konva.Rect({
     x: x,
     y: y,
     width,
     height: imgHeight,
-    cornerRadius: [20, 20, 20, 20],
+    cornerRadius: cornerRadius,
+    strokeWidth: 2,
+    stroke: "#a6d28d",
+    lineJoin: "round",
+    lineCap: "round",
+    dash: [2, 6],
+  });
+
+  var rectimg = new Konva.Rect({
+    x: x + (width - width * scale.x) / 2,
+    y: y + (imgHeight - imgHeight * scale.y) / 2,
+    width,
+    height: imgHeight,
+    cornerRadius: cornerRadius,
     fillPatternImage: img,
     fillPriority: "pattern",
+    scale: scale,
   });
-  layer.add(rect);
+  layer.add(rectborder).add(rectimg);
   return Promise.resolve(imgHeight);
 }

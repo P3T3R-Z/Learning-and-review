@@ -3,9 +3,13 @@ let mainConfig = {
   buildDir: "build", //处理后地址
   imgType: [".jpg", ".png"], //图片类型
   watermark: "./logo.png", //水印图片
+  headImg: "./head.png", //头部图片
+  footImg: "./foot.png", //底部图片
 
-  textSplitSign: /.+[\r\n]*?/g,
-  textEncoding: "utf-8",
+
+
+  textSplitSign: /.+[\r\n]*?/g, //文本段落回车符
+  textEncoding: "utf-8", //文本编码格式
 
   width: 957, //海报宽度
   height: 1000, //初始高度, 后面会计算实际高度
@@ -14,22 +18,25 @@ let mainConfig = {
   imgMargin: 60,
 };
 
-exports.mainConfig = mainConfig;
-
 let textConfig = {
   lineHeight: 2, //文字行高
-  fontSize: 30, //文字大小
-  fontFamily: "sans-serif", //字体
+  fontSize: 30, //文字大小 
   fill: "#686868", //文字颜色
   width: 794, //文本宽度
   x: 80, //距左边
+  fontFamily: "'Alibaba-PuHuiTi-Regular'",
+  stroke: '#fff',
+  strokeWidth: 1
 };
 
-exports.textConfig = textConfig;
-
 let imgConfig = {
-  width: 730, //图片宽度
-  x: 113, //距左边
+  width: 794, //图片宽度
+  x: 80, //距左边
+
+  cornerRadius: 20, //图片圆角
+  scale: { x: 0.92, y: 0.95 }, //图片与虚线对比后的宽高缩小比例
 };
 
 exports.imgConfig = imgConfig;
+exports.mainConfig = mainConfig;
+exports.textConfig = textConfig;
