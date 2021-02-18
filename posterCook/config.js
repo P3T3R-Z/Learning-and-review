@@ -2,9 +2,9 @@ let mainConfig = {
   srcDir: "src", //入口
   buildDir: "build", //处理后地址
   imgType: [".jpg", ".png"], //图片类型
-  watermark: "./logo.png", //水印图片
-  headImg: "./head.png", //头部图片
-  footImg: "./foot.png", //底部图片
+  watermark: "./static/logo.png", //水印图片
+  headImg: "./static/head.png", //头部图片
+  footImg: "./static/foot.png", //底部图片
 
 
 

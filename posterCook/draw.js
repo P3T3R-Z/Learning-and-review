@@ -1,7 +1,6 @@
 let { textConfig, mainConfig, imgConfig } = require("./config.js");
 const Konva = require("konva-node");
 let path = require("path");
-let { readstream } = require("./util.js");
 module.exports = async function drawPoster(posters) {
   let imgs = "";
 

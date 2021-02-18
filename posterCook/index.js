@@ -2,8 +2,8 @@ const express = require('express');
 const app = new express();
 
 
-var canvas = require('canvas');
-canvas.registerFont('./Alibaba-PuHuiTi-Bold.ttf', {family: 'Alibaba-PuHuiTi-Regular'});
+// var canvas = require('canvas');
+// canvas.registerFont('./static/Alibaba-PuHuiTi-Bold.ttf', {family: 'Alibaba-PuHuiTi-Regular'});
  
 
  

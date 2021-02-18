@@ -23,8 +23,7 @@ module.exports = class PosterCook {
 
     await this.initProcess(srcDir, posters);
     let res = "--initProcess finish--"
-    console.log(res);
-    
+
     if (Object.keys(query).length > 0) {
       posters = this.formatdata(posters);
       return drawPoster(posters);
@@ -58,7 +57,8 @@ module.exports = class PosterCook {
     if (extname === ".txt") {
       var str = await readstream(filepath, textEncoding);
       return Promise.resolve({ str });
-    } else if (imgType.includes(extname)) {
+    } 
+    else if (imgType.includes(extname)) {
       //水印设置
       var img = await watermark(filepath);
       return Promise.resolve({ img });
@@ -89,13 +89,15 @@ module.exports = class PosterCook {
   ]
   */
   formatdata(data) {
-    return data.reduce((prev, item) => {
+   
+    return data.reduce((prev, item, key) => {
+      
       let hasdata = prev.find((i) => i.name == item.name);
       if (hasdata) {
         if (item.hasOwnProperty("img")) {
           hasdata.img.push(item.img);
         } else if (item.hasOwnProperty("str")) {
-          hasdata.str.concat(this.splitText(item.str));
+          hasdata.str = hasdata.str.concat(this.splitText(item.str));
         }
       } else {
         prev.push({
