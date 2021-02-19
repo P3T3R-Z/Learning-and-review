@@ -1,21 +1,21 @@
 let fs = require("fs"),
   path = require("path");
+let watermark = require("./watermark");
 
+let drawPoster = require("./draw.js");
+
+let { readstream, fonttrick } = require("./util.js");
 let {
   mainConfig: { srcDir, imgType, textEncoding, textSplitSign, font },
   textConfig: { fontFamily }
 } = require("./config.js");
 
 var canvas = require("canvas");
-canvas.registerFont(font, {
+canvas.registerFont(fonttrick(), {
   family: fontFamily,
 });
 
-let watermark = require("./watermark");
 
-let drawPoster = require("./draw.js");
-
-let { readstream } = require("./util.js");
 
 module.exports = class PosterCook {
   constructor() {}

@@ -54,3 +54,26 @@ exports.checkAndMkdir = (path) => {
     });
   });
 };
+
+
+
+
+exports.fonttrick = function () {
+
+  const RobotoR = require.resolve('./static/Alibaba-PuHuiTi-Bold.ttf')
+  const { COPYFILE_EXCL } = fs.constants;
+  const { COPYFILE_FICLONE } = fs.constants;
+
+
+  try {
+    if (fs.existsSync('/tmp/Alibaba-PuHuiTi-Bold.ttf')) {
+      console.log("Roboto lives in tmp!!!!")
+    } else {
+      fs.copyFileSync(RobotoR, '/tmp/Alibaba-PuHuiTi-Bold.ttf', COPYFILE_FICLONE | COPYFILE_EXCL)
+    }
+  } catch (err) {
+    console.error(err)
+  }
+
+  return '/tmp/Alibaba-PuHuiTi-Bold.ttf'
+};
