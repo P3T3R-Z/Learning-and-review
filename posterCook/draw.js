@@ -1,17 +1,46 @@
-let { textConfig, mainConfig, imgConfig } = require("./config.js");
+let { textConfig, mainConfig, imgConfig, mainBOXConfig } = require("./config.js");
 const Konva = require("konva-node");
 let path = require("path");
+let { base64ToFile, checkAndMkdir } = require("./util.js");
+const Jimp = require("jimp");
+
 module.exports = async function drawPoster(posters) {
   let imgs = "";
 
   for (let i = 0; i < posters.length; i++) {
     var data = posters[i];
 
+    //卡片base64
     let dataUrl = await konva_draw(data);
-    imgs += `<img src="${dataUrl}" style="display:block;margin:0 auto"/>`;
+
+    
+
+    const filename = path.basename(data.name);//文件名
+    //文件夹名
+    const fileClassName = path.join(
+      __dirname,
+      data.name
+        .replace(mainConfig.srcDir, mainConfig.buildDir)
+        .replace(`\\${filename}`, "")
+    );
+
+    await checkAndMkdir(fileClassName);
+
+    const FILENAME =
+      path.join(
+        __dirname,
+        data.name.replace(mainConfig.srcDir, mainConfig.buildDir)
+      ) + "_card.png";
+
+      //base64转图片
+    base64ToFile(dataUrl, FILENAME);
+
+
+    //开启express预览的图片
+    //imgs += `<img src="${dataUrl}" style="display:block;margin:0 auto"/>`;
   }
 
-  return Promise.resolve(`<html style="background:#000">${imgs}</html>`);
+  // return Promise.resolve(`<html style="background:#000">${imgs}</html>`);
 };
 
 async function konva_draw(data) {
@@ -20,21 +49,13 @@ async function konva_draw(data) {
     ctxHeight = 0;
 
   var stage = new Konva.Stage({
-    width: mainConfig.width,
+    width: mainConfig.width + mainConfig.shadowWidth * 2,
   });
-
   var layer = new Konva.Layer();
   stage.add(layer);
-  var rect = new Konva.Rect({
-    fill: "#fff",
-    width: mainConfig.width,
-    shadowColor: "black",
-    shadowBlur: 10,
-    shadowOffsetX: 10,
-    shadowOffsetY: 10,
-    shadowOpacity: 0.2,
-    cornerRadius: 60,
-  });
+
+  //内容盒子
+  var rect = new Konva.Rect(mainBOXConfig);
   layer.add(rect);
 
   let headimgHeight = await drawImage(
@@ -76,7 +97,7 @@ async function konva_draw(data) {
   ctxHeight = ctxHeight + footimgHeight + margin;
 
   rect.height(ctxHeight);
-  stage.height(ctxHeight);
+  stage.height(ctxHeight + mainConfig.shadowWidth * 2);
 
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -95,8 +116,11 @@ function drawText(layer, textstr, y = 0) {
   var text = new Konva.Text({
     text: textstr,
     ...textConfig,
+    x: textConfig.x + mainConfig.shadowWidth,
+    y: textConfig.y + mainConfig.shadowWidth,
     y,
-  }); 
+  });
+  text.letterSpacing(textConfig.letterSpacing);
   layer.add(text);
   return text.height();
 }
@@ -111,8 +135,8 @@ function drawImage(layer, imgdata, x = 0, y = 0, width) {
       var image = new Konva.Image({
         image: img,
         height: imgHeight,
-        y,
-        x,
+        y: y + mainConfig.shadowWidth,
+        x: x + mainConfig.shadowWidth,
         width,
       });
 
@@ -141,8 +165,8 @@ async function drawCtxImg(layer, imgdata, x = 0, y = 0, width) {
   let { img, imgHeight } = await loadImages(imgdata, width);
   let { cornerRadius, scale } = imgConfig;
   var rectborder = new Konva.Rect({
-    x: x,
-    y: y,
+    x: x + mainConfig.shadowWidth,
+    y: y + mainConfig.shadowWidth,
     width,
     height: imgHeight,
     cornerRadius: cornerRadius,
@@ -154,8 +178,8 @@ async function drawCtxImg(layer, imgdata, x = 0, y = 0, width) {
   });
 
   var rectimg = new Konva.Rect({
-    x: x + (width - width * scale.x) / 2,
-    y: y + (imgHeight - imgHeight * scale.y) / 2,
+    x: x + (width - width * scale.x) / 2 + mainConfig.shadowWidth,
+    y: y + (imgHeight - imgHeight * scale.y) / 2 + mainConfig.shadowWidth,
     width,
     height: imgHeight,
     cornerRadius: cornerRadius,

@@ -1,35 +1,34 @@
 let fs = require("fs"),
   path = require("path");
-let { createCanvas, loadImage } = require("canvas");
+
+let {
+  mainConfig: { srcDir, imgType, textEncoding, textSplitSign, font },
+  textConfig: { fontFamily }
+} = require("./config.js");
+
+var canvas = require("canvas");
+canvas.registerFont(font, {
+  family: fontFamily,
+});
 
 let watermark = require("./watermark");
 
 let drawPoster = require("./draw.js");
-
-let {
-  srcDir,
-  imgType,
-  textEncoding,
-  textSplitSign,
-} = require("./config.js").mainConfig;
 
 let { readstream } = require("./util.js");
 
 module.exports = class PosterCook {
   constructor() {}
 
-  async cook(query) {
+  async cook() {
     let posters = [];
 
     await this.initProcess(srcDir, posters);
-    let res = "--initProcess finish--"
 
-    if (Object.keys(query).length > 0) {
-      posters = this.formatdata(posters);
-      return drawPoster(posters);
-    } else {
-      return Promise.resolve(res)
-    }
+    console.log("水印完成, 文本读取完成");
+    posters = this.formatdata(posters);
+
+    drawPoster(posters);
   }
 
   //步骤1: 获取读取的文字和水印图片
@@ -57,8 +56,7 @@ module.exports = class PosterCook {
     if (extname === ".txt") {
       var str = await readstream(filepath, textEncoding);
       return Promise.resolve({ str });
-    } 
-    else if (imgType.includes(extname)) {
+    } else if (imgType.includes(extname)) {
       //水印设置
       var img = await watermark(filepath);
       return Promise.resolve({ img });
@@ -89,9 +87,7 @@ module.exports = class PosterCook {
   ]
   */
   formatdata(data) {
-   
     return data.reduce((prev, item, key) => {
-      
       let hasdata = prev.find((i) => i.name == item.name);
       if (hasdata) {
         if (item.hasOwnProperty("img")) {
