@@ -7,15 +7,13 @@ let drawPoster = require("./draw.js");
 let { readstream, fonttrick } = require("./util.js");
 let {
   mainConfig: { srcDir, imgType, textEncoding, textSplitSign, font },
-  textConfig: { fontFamily }
+  textConfig: { fontFamily },
 } = require("./config.js");
 
 var canvas = require("canvas");
-canvas.registerFont(fonttrick(), {
+canvas.registerFont(fonttrick(font), {
   family: fontFamily,
 });
-
-
 
 module.exports = class PosterCook {
   constructor() {}
@@ -24,13 +22,15 @@ module.exports = class PosterCook {
     let posters = [];
 
     await this.initProcess(srcDir, posters);
-
     console.log("水印完成, 文本读取完成");
+
     posters = this.formatdata(posters);
 
     drawPoster(posters);
   }
-
+  async watermark() {
+    await this.initProcess(srcDir);
+  }
   //步骤1: 获取读取的文字和水印图片
   async initProcess(dirname, posters) {
     let files = fs.readdirSync(dirname);
@@ -42,9 +42,14 @@ module.exports = class PosterCook {
       if (stats.isDirectory()) {
         await this.initProcess(path.join(dirname, file), posters);
       } else if (stats.isFile()) {
-        let cookdata = await this.readTextAndMarkImg(path.join(dirname, file));
-
-        posters.push({ name: dirname, ...cookdata });
+        if (!posters) {
+          this.doWatermark(path.join(dirname, file));
+        } else {
+          let cookdata = await this.readTextAndMarkImg(
+            path.join(dirname, file)
+          );
+          posters.push({ name: dirname, ...cookdata });
+        }
       }
     }
   }
@@ -60,6 +65,14 @@ module.exports = class PosterCook {
       //水印设置
       var img = await watermark(filepath);
       return Promise.resolve({ img });
+    }
+  }
+
+  doWatermark(filepath) {
+    let extname = path.extname(filepath);
+    if (imgType.includes(extname)) {
+      //水印设置
+      watermark(filepath, '只做水印');
     }
   }
 

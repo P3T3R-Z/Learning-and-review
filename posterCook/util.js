@@ -1,6 +1,6 @@
 //读取文本
 var fs = require("fs");
-
+var path = require('path')
 exports.readstream = function (filepath, textEncoding) {
   return new Promise((resolve, reject) => {
     var readstream = fs.createReadStream(filepath, { encoding: textEncoding });
@@ -60,22 +60,23 @@ exports.checkAndMkdir = (path) => {
 
 //https://stackoverflow.com/questions/60103921/node-canvas-registerfont-cant-find-font-file-once-deployed-works-locally
 //解决部分电脑 can not parse font file问题
-exports.fonttrick = function () {
-
-  const RobotoR = require.resolve('./static/Alibaba-PuHuiTi-Bold.ttf')
+exports.fonttrick = function (fontPath) {
+  
+  fontPath = require.resolve(fontPath)
   const { COPYFILE_EXCL } = fs.constants;
   const { COPYFILE_FICLONE } = fs.constants;
+  const filename = path.basename(fontPath);
 
-
+  const tmpPath = `/tmp/${filename}`
   try {
-    if (fs.existsSync('/tmp/Alibaba-PuHuiTi-Bold.ttf')) {
-      console.log("Roboto lives in tmp!!!!")
+    if (fs.existsSync(tmpPath)) {
+      console.log(tmpPath+"已存在")
     } else {
-      fs.copyFileSync(RobotoR, '/tmp/Alibaba-PuHuiTi-Bold.ttf', COPYFILE_FICLONE | COPYFILE_EXCL)
+      fs.copyFileSync(fontPath, tmpPath, COPYFILE_FICLONE | COPYFILE_EXCL)
     }
   } catch (err) {
     console.error(err)
   }
 
-  return '/tmp/Alibaba-PuHuiTi-Bold.ttf'
+  return tmpPath
 };

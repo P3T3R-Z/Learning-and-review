@@ -6,7 +6,7 @@ const Jimp = require("jimp");
 
 module.exports = async function drawPoster(posters) {
   let imgs = "";
-
+  await checkAndMkdir(mainConfig.buildDir);
   for (let i = 0; i < posters.length; i++) {
     var data = posters[i];
 
