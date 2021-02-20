@@ -33,6 +33,7 @@ exports.base64ToFile = (imgData, filepath) => {
     }
   });
 };
+
 //检查并生成文件夹
 exports.checkAndMkdir = (path) => {
   return new Promise((resolve) => {
@@ -57,7 +58,8 @@ exports.checkAndMkdir = (path) => {
 
 
 
-
+//https://stackoverflow.com/questions/60103921/node-canvas-registerfont-cant-find-font-file-once-deployed-works-locally
+//解决部分电脑 can not parse font file问题
 exports.fonttrick = function () {
 
   const RobotoR = require.resolve('./static/Alibaba-PuHuiTi-Bold.ttf')
